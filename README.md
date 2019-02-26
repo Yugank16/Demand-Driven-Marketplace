@@ -5,8 +5,9 @@ Demand driven marketplace for household items(old/new/2nd hand everything). Buye
 
 # System Requirements
 
-1 psql (PostgreSQL) v9.5.14
-2 Python v2.7
+1 psql (PostgreSQL) v9.5.14.
+
+2 Python v2.7.
 
 
 # Django Setup (for ubuntu)
@@ -21,15 +22,14 @@ sudo apt-get update
 
 1- Install pip-
 
-	```bash
 	sudo apt-get install python-pip
-	```
+	
 
 2- Install Virtual Environment 
 
-	```bash
+	
 	sudo pip install virtualenv 
-	```
+	
 
 3- Install and use virtual env wrapper
 	
@@ -65,8 +65,10 @@ sudo apt-get update
 
 # Run Project
 
-1 Run $ python manage.py migrate to run migrations
-2 Run server, $ python manage.py runserver
-3 Open http://127.0.0.1:8000/ in your browser.
+1- Run $ python manage.py migrate to run migrations.
+
+2- Run server, $ python manage.py runserver.
+
+3- Open http://127.0.0.1:8000/ in your browser.
 
 
