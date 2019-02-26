@@ -3,7 +3,7 @@
 
 Demand driven marketplace for household items(old/new/2nd hand everything). Buyer will post their requirement with budget, where seller(any platform user) can bid for that requirement.
 
-#System Requirements
+# System Requirements
 
 1 psql (PostgreSQL) v9.5.14
 2 Python v2.7
@@ -20,36 +20,40 @@ sudo apt-get update
 ```
 
 1- Install pip-
+
 	```bash
 	sudo apt-get install python-pip
 	```
 
 2- Install Virtual Environment 
+
 	```bash
 	sudo pip install virtualenv 
 	```
 
 3- Install and use virtual env wrapper
 	
-	```bash 
+	
 	sudo pip install virtualenvwrapper
-	```	
+	
 	export WORKON_HOME=~/Envs
-	```bash	
+	
 	mkdir -p $WORKON_HOME
-	```	
+	
 	source /usr/local/bin/virtualenvwrapper.sh
-	```bash	
+	
 	mkvirtualenv env1
+
 	workon env1
+
 	Deactivate
-	```
+	
 	
 	put statements 2 & 4 in our ~/.bashrc file
 
-3- Install all requirements. Refer requirements.txt
+4- Install all requirements. Refer requirements.txt
 
-#Start Project
+# Start Project
 
 1 Clone project to your directory.
 
