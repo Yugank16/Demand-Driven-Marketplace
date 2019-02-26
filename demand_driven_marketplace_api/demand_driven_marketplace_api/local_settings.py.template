@@ -5,10 +5,10 @@ import settings
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': ' dd_marketplace_db',
-        'USER': 'postgres',
-        'PASSWORD': 'yugank123',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': ' <Database Name>',
+        'USER': '<Username>',
+        'PASSWORD': '<Password>',
+        'HOST': '<host>',
+        'PORT': '<Port number>',
     }
 }

@@ -96,3 +96,4 @@ try:
    from local_settings import *
 except ImportError:
     raise ImportError("A local_settings.py file is required to run this project")
+
