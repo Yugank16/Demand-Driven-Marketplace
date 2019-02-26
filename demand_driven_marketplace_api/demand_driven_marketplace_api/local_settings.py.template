@@ -1,0 +1,14 @@
+#Replace all the place holders with your credentials 
+
+import settings
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': ' dd_marketplace_db',
+        'USER': 'postgres',
+        'PASSWORD': 'yugank123',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
