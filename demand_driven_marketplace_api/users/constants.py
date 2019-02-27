@@ -1,0 +1,5 @@
+CONSTANTS = {
+    "TEXT_SIZE_SMALL": 32,
+    "TEXT_SIZE_MEDIUM": 64,
+    "TEXT_SIZE_LARGE": 128,
+}

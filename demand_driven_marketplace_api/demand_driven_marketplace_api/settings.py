@@ -9,7 +9,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -49,17 +48,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'demand_driven_marketplace_api.wsgi.application'
 
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': '<DATABASE_NAME>',
-        'USER': '<DATABASE_USER>',
-        'PASSWORD': '<DATABASE_PASSWORD>',
-        'HOST': '<DATABASE_HOST>',
-        'PORT': '<DATABASE_PORT>',
-}
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -75,8 +63,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -87,10 +73,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-
 STATIC_URL = '/static/'
-
 
 try:
    from local_settings import *
