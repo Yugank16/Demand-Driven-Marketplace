@@ -1,9 +1,10 @@
 from __future__ import unicode_literals
 
-from django.contrib.auth.models import AbstractBaseUser,BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 
-from users.constants import CONSTANTS
+from apps.users.constants import CONSTANTS
+
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None):
@@ -27,20 +28,21 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
 class User(AbstractBaseUser):
     """
     User Model To Store User Details
     """
     email = models.EmailField(max_length=CONSTANTS["TEXT_SIZE_MEDIUM"], unique=True)
-    name = models.CharField(max_length=CONSTANTS["TEXT_SIZE_MEDIUM"])
-    phone_number = models.IntegerField()
-    balance =  models.IntegerField()
+    first_name = models.CharField(max_length=CONSTANTS["TEXT_SIZE_MEDIUM"], blank=True)
+    last_name = models.CharField(max_length=CONSTANTS["TEXT_SIZE_MEDIUM"], blank=True)
+    balance = models.IntegerField(null=True)
     USER_TYPE_CHOICES = (
         (1, 'Buyer'),
         (2, 'Seller'),
         (3, 'Both'),
     )
-    user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES)
+    user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, null=True)
     is_admin = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
@@ -48,10 +50,10 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     def get_full_name(self):
-        return self.name
+        return self.first_name + self.last_name
 
     def get_short_name(self):
-        return self.name
+        return self.first_name
 
     @property
     def is_staff(self):
@@ -67,4 +69,4 @@ class User(AbstractBaseUser):
         return True
  
     def __unicode__(self):
-        return '{}'.format(self.name)
+        return '{}'.format(self.first_name)

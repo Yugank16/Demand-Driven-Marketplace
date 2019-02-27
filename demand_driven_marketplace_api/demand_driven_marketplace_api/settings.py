@@ -16,6 +16,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'apps.users',
 ]
 
 MIDDLEWARE = [
@@ -29,6 +32,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'demand_driven_marketplace_api.urls'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
 
 TEMPLATES = [
     {
@@ -75,8 +84,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-try:
-   from local_settings import *
-except ImportError:
-    raise ImportError("A local_settings.py file is required to run this project")
+AUTH_USER_MODEL = 'users.user'
 
+try:
+    from local_settings import *
+except ImportError:
+    raise ImportError(
+        "A local_settings.py file is required to run this project")
