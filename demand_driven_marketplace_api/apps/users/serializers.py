@@ -19,8 +19,10 @@ class UserSerializer(serializers.ModelSerializer):
         return make_password(password)
 
     def create(self, validated_data):
+        print validated_data
         validated_data['balance'] = CONSTANTS['INITIAL_BALANCE']
         user = User.objects.create(**validated_data)
+        print user
         token = Token.objects.create(user=user)
         user.token = token.key
         return user
