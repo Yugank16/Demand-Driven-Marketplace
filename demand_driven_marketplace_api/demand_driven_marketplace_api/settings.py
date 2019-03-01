@@ -16,7 +16,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'django_extensions',
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
@@ -38,16 +38,19 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_WHITELIST= (
+CORS_ORIGIN_WHITELIST = (
     'localhost:3000',
 )
-CORS_ORIGIN_REGEX_WHITELIST= (
+CORS_ORIGIN_REGEX_WHITELIST = (
     'localhost:3000',
 )
 
 ROOT_URLCONF = 'demand_driven_marketplace_api.urls'
 
 REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     )
