@@ -22,12 +22,8 @@ class UserViewSet(mixins.CreateModelMixin,
     serializer_class = UserSerializer
 
     def get_permissions(self):
-
         if self.request.method == 'POST':
             self.permission_classes = [AllowAny, ]
-        else:
-            self.permission_classes = [IsAuthenticated, ]
-
         return super(UserViewSet, self).get_permissions()
 
     def get_object(self):
