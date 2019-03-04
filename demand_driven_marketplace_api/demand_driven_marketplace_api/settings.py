@@ -20,7 +20,9 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_swagger',
     'debug_toolbar',
+    'debug_panel',
     'apps.users',
 ]
 
@@ -33,7 +35,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'debug_panel.middleware.DebugPanelMiddleware',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -102,6 +104,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'users.user'
+
+INTERNAL_IPS = ('127.0.0.1',)
 
 try:
     from local_settings import *
