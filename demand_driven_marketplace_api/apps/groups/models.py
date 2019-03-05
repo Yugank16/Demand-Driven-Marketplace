@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+from demand_driven_marketplace_api.constants import GLOBAL_CONSTANTS
 from apps.users.models import User
 
 
@@ -9,8 +10,8 @@ class Group(models.Model):
     """
     Group Model For Storing Group Details
     """
-    name = models.CharField(max_length=CONSTANTS["TEXT_SIZE_MEDIUM"])
-    group_info = models.CharField(max_length=CONSTANTS["TEXT_SIZE_LARGE"])
+    name = models.CharField(max_length=GLOBAL_CONSTANTS["TEXT_SIZE_SMALL"])
+    group_info = models.CharField(max_length=GLOBAL_CONSTANTS["TEXT_SIZE_MEDIUM"])
 
 
 class GroupMember(models.Model):

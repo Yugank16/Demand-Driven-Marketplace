@@ -17,7 +17,8 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'email', 'password', 'first_name', 'last_name', 'user_type', 'token')
 
-    def validate(seld, data):
+    def validate(self, data):
+        super(self, data)
         if len(data['password']) < CONSTANTS['PASSWORD_MIN_LENGTH']:
             raise ValidationError('Password too Short.It must contain atleast {} characters.'.format(CONSTANTS['PASSWORD_MIN_LENGTH']))
         if len(data['password']) > CONSTANTS['PASSWORD_MAX_LENGTH']:
@@ -32,6 +33,7 @@ class UserSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
+        super(self, data)
         print validated_data
         validated_data['balance'] = CONSTANTS['INITIAL_BALANCE']
         user = User.objects.create(**validated_data)
@@ -39,3 +41,5 @@ class UserSerializer(serializers.ModelSerializer):
         token = Token.objects.create(user=user)
         user.token = token.key
         return user
+
+
