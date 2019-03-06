@@ -37,5 +37,5 @@ class Logout(APIView):
     def delete(self, request, format=None):
         request.user.auth_token.delete()
         return Response(status=status.HTTP_200_OK)
-        
+
 

@@ -1,2 +1,1 @@
-def abc():
-    print 'asdsad'
+

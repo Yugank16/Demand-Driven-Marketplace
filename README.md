@@ -57,7 +57,7 @@ put statements 2 & 4 in our ~/.bashrc file
 	
 	cd ~/demand_driven_marketplace_api/demand_driven_marketplace_api/
 
-1 Add local_settings.py file in the main directory where local_sttings.py.template is present, add the code from tempelate to local_settings.py after replacing all the placeholders.
+2 Add local_settings.py file in the directory where setting is present and configure your local_settings.py file with your database details.
 
 # Run Project
 

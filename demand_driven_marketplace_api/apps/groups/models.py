@@ -2,8 +2,8 @@ from __future__ import unicode_literals
 
 from django.db import models
 
-from demand_driven_marketplace_api.constants import GLOBAL_CONSTANTS
-from apps.users.models import User
+from apps.commons.constants import GLOBAL_CONSTANTS
+from django.conf import settings
 
 
 class Group(models.Model):
@@ -15,7 +15,7 @@ class Group(models.Model):
 
 
 class GroupMember(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     group = models.ForeignKey(Group)
     MEMBER_TYPE_CHOICES = (
         (1, 'Owner'),
@@ -24,3 +24,5 @@ class GroupMember(models.Model):
     )
     member_type = models.PositiveSmallIntegerField(choices=MEMBER_TYPE_CHOICES)
 
+    class Meta(object):
+        unique_together = ('user', 'group')

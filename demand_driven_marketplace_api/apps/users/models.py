@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 
-from demand_driven_marketplace_api.constants import GLOBAL_CONSTANTS, USER_CONSTANTS
+from apps.commons.constants import *
 
 
 class UserManager(BaseUserManager):
@@ -33,9 +33,9 @@ class User(AbstractBaseUser):
     """
     User Model To Store User Details
     """
-    email = models.EmailField(max_length=GLOBAL_CONSTANTS["TEXT_SIZE_SMALL"], unique=True)
-    first_name = models.CharField(max_length=GLOBAL_CONSTANTS["TEXT_SIZE_SMALL"], blank=True)
-    last_name = models.CharField(max_length=GLOBAL_CONSTANTS["TEXT_SIZE_SMALL"], blank=True)
+    email = models.EmailField(unique=True)
+    first_name = models.CharField(max_length=USER_CONSTANTS["FIRST_NAME_MAX_LENGTH"])
+    last_name = models.CharField(max_length=USER_CONSTANTS["LAST_NAME_MAX_LENGTH"], blank=True)
     balance = models.IntegerField(null=True)
     USER_TYPE_CHOICES = (
         (1, 'Buyer'),
