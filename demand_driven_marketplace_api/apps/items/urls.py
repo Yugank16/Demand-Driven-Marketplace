@@ -6,7 +6,10 @@ urlpatterns = [
     url(r'^api/requests/$', ItemViewSet.as_view({
         'get': 'list',
         'post': 'create',
-    }), name='items')
+    }), name='items'),
+    url(r'^api/request-details/(?P<pk>\d+)/$', ItemViewSet.as_view({
+        'get': 'retrieve',
+    }))
 ]
 
 
