@@ -17,15 +17,21 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta(object):
         model = User
-        fields = ('id', 'email', 'password', 'first_name', 'last_name', 'user_type', 'token')
+        fields = ('id', 'email', 'password', 'first_name',
+                  'last_name', 'user_type', 'token')
+
+    def validate_password(self, password):
+        password = make_password(password)
+        return password
 
     def create(self, validated_data):
         print validated_data
         validated_data['balance'] = CONSTANTS['INITIAL_BALANCE']
         user = User.objects.create(**validated_data)
-        print user
         token = Token.objects.create(user=user)
         user.token = token.key
         return user
 
 
+class EmailSerializer(serializers.Serializer):
+    email = serializers.EmailField()
