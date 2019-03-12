@@ -8,15 +8,16 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 
-from apps.users.serializers import UserSerializer
+from apps.users.serializers import UserSerializer, ChangePasswordse
 from apps.users.models import User
 
 
 class UserViewSet(mixins.CreateModelMixin,
                   mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin,
                   viewsets.GenericViewSet):
     """
-    API for signup and get user details
+    API for signup , get user details and update user details
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -25,6 +26,14 @@ class UserViewSet(mixins.CreateModelMixin,
         if self.request.method == 'POST':
             self.permission_classes = [AllowAny, ]
         return super(UserViewSet, self).get_permissions()
+
+    def get_object(self):
+        return self.request.user
+
+
+class ChangePassword(mixins.UpdateModelMixin, viewsets.GenericViewSet):
+   
+    serializer_class = ChangePasswordse
 
     def get_object(self):
         return self.request.user

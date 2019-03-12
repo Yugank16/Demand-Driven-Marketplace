@@ -109,9 +109,3 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'users.user'
 
 INTERNAL_IPS = ('127.0.0.1',)
-
-try:
-    from local_settings import *
-except ImportError:
-    raise ImportError(
-        "A local_settings.py file is required to run this project")
