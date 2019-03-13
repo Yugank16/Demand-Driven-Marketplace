@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 
-from apps.users.serializers import UserSerializer, ChangePasswordse
+from apps.users.serializers import UserSerializer, ChangePasswordSerializer
 from apps.users.models import User
 
 
@@ -32,8 +32,10 @@ class UserViewSet(mixins.CreateModelMixin,
 
 
 class ChangePassword(mixins.UpdateModelMixin, viewsets.GenericViewSet):
-   
-    serializer_class = ChangePasswordse
+    """
+    Api for Change Password
+    """
+    serializer_class = ChangePasswordSerializer
 
     def get_object(self):
         return self.request.user

@@ -39,15 +39,15 @@ class User(AbstractBaseUser):
     last_name = models.CharField(max_length=USER_CONSTANTS["LAST_NAME_MAX_LENGTH"], blank=True)
     balance = models.IntegerField(null=True)
     GENDER_CHOICES = (
-        (1, 'MALE'),
-        (2, 'FEMALE'),
-        (3, 'OTHERS'),
+        (USER_CONSTANTS["M"], 'MALE'),
+        (USER_CONSTANTS["F"], 'FEMALE'),
+        (USER_CONSTANTS["O"], 'OTHERS'),
     )
-    gender = models.PositiveIntegerField(choices=GENDER_CHOICES, null=True)
+    gender = models.CharField(max_length=USER_CONSTANTS["GENDER"], choices=GENDER_CHOICES, null=True)
     profile_photo = models.ImageField(upload_to='profile_photo/', null=True)
     birth_date = models.DateField(null=True)
     phone_regex = RegexValidator(regex=r'^[6-9]{1}\d{9}$', message="Phone number must contain 10 digits.")
-    phone_number = models.CharField(max_length=10, validators=[phone_regex, ], blank=True)
+    phone_number = models.CharField(max_length=USER_CONSTANTS["PHONE_NUMBER"], validators=[phone_regex, ], blank=True)
     USER_TYPE_CHOICES = (
         (1, 'Buyer'),
         (2, 'Seller'),
