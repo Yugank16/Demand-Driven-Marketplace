@@ -13,4 +13,5 @@ USER_CONSTANTS = {
     "FIRST_NAME_MIN_LENGTH": 2,
     "FIRST_NAME_MAX_LENGTH": 32,
     "LAST_NAME_MAX_LENGTH": 32,
+    "PASSWORD_RESET_CONFIRM_URL": "http://localhost:3000/reset_password/confirm",
 }
