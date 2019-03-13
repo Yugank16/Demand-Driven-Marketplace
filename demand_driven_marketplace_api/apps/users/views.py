@@ -5,11 +5,10 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.shortcuts import render
 
-
-
 from rest_framework import mixins, viewsets, status
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
+from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -46,7 +45,7 @@ class Logout(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class ResetPasswordRequestToken(APIView):
+class ResetPasswordRequestToken(GenericAPIView):
     """
     An Api View which provides a method to request a password reset token based on an e-mail address
     Sends a signal reset_password_token_created when a reset token was created
@@ -76,10 +75,9 @@ class ResetPasswordRequestToken(APIView):
         token = PasswordResetTokenGenerator.make_token(
             default_token_generator, user)
 
-        
         send_mail(
             'Password Reset Link',
-            'Go to the following link to set a new password.{}'.format(),
+            'Go to the following link to set a new password',
             'from@example.com',
             [email],
             fail_silently=False,
