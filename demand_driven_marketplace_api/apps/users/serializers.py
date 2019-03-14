@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 import django.contrib.auth.password_validation as validators
 from django.contrib.auth.hashers import check_password
 
+
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
@@ -23,6 +24,10 @@ class UserSerializer(serializers.ModelSerializer):
     
     def validate_password(self, password):
         return make_password(password)
+    
+    def validate(self, data):
+        print data
+        return data
 
     def create(self, validated_data):
         print validated_data

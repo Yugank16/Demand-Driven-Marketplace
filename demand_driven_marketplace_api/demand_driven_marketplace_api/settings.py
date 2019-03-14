@@ -25,7 +25,6 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'debug_toolbar',
     'debug_panel',
-
     'apps.users',
     'apps.groups',
     'apps.items',
