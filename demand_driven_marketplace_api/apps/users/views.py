@@ -30,6 +30,13 @@ class UserViewSet(mixins.CreateModelMixin,
     def get_object(self):
         return self.request.user
 
+    def partial_update(self, request, **kwargs):
+        print request.data
+        # for k, v in request.META.items():
+        #     print 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+        #     print k, '-------> ', v
+        return super(UserViewSet, self).partial_update(request, **kwargs)
+
 
 class ChangePassword(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """
@@ -48,5 +55,4 @@ class Logout(APIView):
     def delete(self, request, format=None):
         request.user.auth_token.delete()
         return Response(status=status.HTTP_200_OK)
-
 
