@@ -1,9 +1,10 @@
 from __future__ import unicode_literals
 
-from django.contrib.auth.tokens import PasswordResetTokenGenerator, default_token_generator
+from django.contrib.auth.tokens import PasswordResetTokenGenerator,default_token_generator
 from django.core.mail import send_mail
 from django.conf import settings
 from django.shortcuts import render
+from django.template.loader import render_to_string
 
 from rest_framework import mixins, viewsets, status
 from rest_framework.authtoken.models import Token
@@ -13,7 +14,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.users.serializers import UserSerializer, EmailSerializer,  ChangePasswordSerializer, PasswordTokenSerializer
+from apps.users.serializers import UserSerializer, EmailSerializer, ChangePasswordSerializer, PasswordTokenSerializer
 from apps.users.models import User
 from apps.commons.constants import *
 
@@ -38,7 +39,9 @@ class UserViewSet(mixins.CreateModelMixin,
 
 
 class ChangePassword(mixins.UpdateModelMixin, viewsets.GenericViewSet):
-   
+    """
+    Api for Change Password
+    """
     serializer_class = ChangePasswordSerializer
 
     def get_object(self):
@@ -68,30 +71,49 @@ class ResetPasswordRequestToken(GenericAPIView):
         email = serializer.validated_data['email']
 
         user = User.objects.filter(email__iexact=email).first()
-        print user
         active_user_found = False
         if user:
             active_user_found = True
 
         if not active_user_found:
-            raise ValidationError({
-                'email': [(
-                    "There is no active user associated with this e-mail address or the password can not be changed")],
-            })
+            return Response({'data': 'Link has been sent to the valid email address', 'status': status.HTTP_200_OK})
 
         token = PasswordResetTokenGenerator.make_token(
             default_token_generator, user)
 
-        reset_url = USER_CONSTANTS["PASSWORD_RESET_CONFIRM_URL"] + '/' + str(user.id) + '/' + str(token) + '/'
+        reset_url = '{}/{}/{}/'.format(USER_CONSTANTS["PASSWORD_RESET_CONFIRM_URL"], user.id, token)
+        
+        ctx = {
+            'name': user.get_short_name(),
+            'reset_url': reset_url,
+        } 
         send_mail(
-            'Password Reset Link',
-            'Go to the following link to set a new password\n',
-            'balleSingh@fmail.com',
+            'Password Reset Email',
+            render_to_string('reset_password_email.txt', ctx),
+            'manager@ddm.com',
             [email],
-            html_message=' < html > < body > < a href="{}" > Click Here < / a > < / body > < / html >'.format(reset_url),
+            fail_silently=True,
+            html_message=render_to_string('reset_password_email.html', ctx),
         )
 
-        return Response({'status': 'OK'})
+        return Response({'data': 'Link has been sent to the valid email address','status': status.HTTP_200_OK})
+
+
+class ResetPasswordTokenVerification(GenericAPIView):
+    """
+    An Api View which checks whether token is valid or not
+    """
+    permission_classes = (AllowAny,)
+    queryset = User.objects.all()
+
+    def get(self, request, *args, **kwargs):
+
+        user = self.get_object()
+        token = self.kwargs.get('token')
+        if not PasswordResetTokenGenerator.check_token(default_token_generator, user, token):
+            return Response({'data': 'Invalid token', 'status': status.HTTP_400_BAD_REQUEST})
+        print "Valid token"    
+        return Response({'status': status.HTTP_200_OK})
 
 
 class ResetPasswordConfirm(GenericAPIView):
@@ -100,19 +122,20 @@ class ResetPasswordConfirm(GenericAPIView):
     """
     permission_classes = (AllowAny,)
     serializer_class = PasswordTokenSerializer
+    queryset = User.objects.all()
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         password = serializer.validated_data['password']
-        token = serializer.validated_data['token']
+        
+        token = self.kwargs.get('token')
+        user = self.get_object()
 
-        user = User.objects.get(pk=self.kwargs.get('pk'))
-        
         if not PasswordResetTokenGenerator.check_token(default_token_generator, user, token):
-            return Response({'status': status.HTTP_400_BAD_REQUEST})
-        
+            return Response({'data': 'Token not Valid', 'status': status.HTTP_400_BAD_REQUEST})
+
         user.set_password(password)
         user.save()
-             
-        return Response({'status': status.HTTP_200_OK})
+
+        return Response({'data': 'Password set successfully', 'status': status.HTTP_200_OK})

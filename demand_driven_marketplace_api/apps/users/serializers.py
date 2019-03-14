@@ -1,6 +1,7 @@
 from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError
 import django.contrib.auth.password_validation as validators
+from django.contrib.auth.hashers import check_password
 
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
@@ -11,7 +12,7 @@ from apps.users.models import User
 
 class UserSerializer(serializers.ModelSerializer):
     """
-    UserSerializer For Getting User Details And Creating New User 
+    UserSerializer For Getting User Details ,Creating New User And Update User Profile
     """
     password = serializers.CharField(write_only=True)
     token = serializers.CharField(read_only=True)
@@ -38,11 +39,12 @@ class EmailSerializer(serializers.Serializer):
 
 class PasswordTokenSerializer(serializers.Serializer):
     password = serializers.CharField()
-    token = serializers.CharField()
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
-
+    """
+    Serializer to change password
+    """
     password = serializers.CharField()
     new_password = serializers.CharField(write_only=True) 
 
@@ -51,7 +53,9 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         fields = ('password', 'new_password')
 
     def validate(self, data):
-        validators.validate_password(password=data['password'], user=self.instance)
+        if not (check_password(data['password'], self.instance.password)):
+            raise ValidationError('Incorrect Old Password')
+        validators.validate_password(data['password'], self.instance)
         if(data['password'] == data['new_password']):
             raise ValidationError('Password can not be same as old password')
         return data
@@ -60,8 +64,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         print validated_data
         validated_data['password'] = make_password(validated_data['new_password'])
         validated_data.pop('new_password')
-        print validated_data
-        instance = super(ChangePasswordse, self).update(instance, validated_data)
+        instance = super(ChangePasswordSerializer, self).update(instance, validated_data)
         return instance
 
 
