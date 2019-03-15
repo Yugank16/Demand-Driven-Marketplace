@@ -13,7 +13,8 @@ from apps.users.models import User
 
 class UserSerializer(serializers.ModelSerializer):
     """
-    UserSerializer For Getting User Details ,Creating New User And Update User Profile
+    UserSerializer For Getting User Details ,Creating New User And Update User
+    Profile
     """
     password = serializers.CharField(write_only=True)
     token = serializers.CharField(read_only=True)
@@ -26,7 +27,6 @@ class UserSerializer(serializers.ModelSerializer):
         return make_password(password)
     
     def validate(self, data):
-        print data
         return data
 
     def create(self, validated_data):
@@ -60,7 +60,6 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if not (check_password(data['password'], self.instance.password)):
             raise ValidationError('Incorrect Old Password')
-        validators.validate_password(data['password'], self.instance)
         if(data['password'] == data['new_password']):
             raise ValidationError('Password can not be same as old password')
         return data

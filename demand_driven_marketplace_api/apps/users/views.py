@@ -1,12 +1,12 @@
 from __future__ import unicode_literals
 
-from django.contrib.auth.tokens import PasswordResetTokenGenerator,default_token_generator
+from django.contrib.auth.tokens import PasswordResetTokenGenerator, default_token_generator
 from django.core.mail import send_mail
 from django.conf import settings
 from django.shortcuts import render
 from django.template.loader import render_to_string
 
-from rest_framework import mixins, viewsets, status, permissions
+from rest_framework import mixins, viewsets, status
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import GenericAPIView
@@ -60,7 +60,8 @@ class Logout(APIView):
 
 class ResetPasswordRequestToken(GenericAPIView):
     """
-    An Api View which provides a method to request a password reset token based on an e-mail address
+    An Api View which provides a method to request a password reset token 
+    based on an e-mail address
     """
     permission_classes = (AllowAny,)
     serializer_class = EmailSerializer
@@ -76,17 +77,17 @@ class ResetPasswordRequestToken(GenericAPIView):
             active_user_found = True
 
         if not active_user_found:
-            return Response({'data': 'Link has been sent to the valid email address', 'status': status.HTTP_200_OK})
+            return Response({'data': USER_CONSTANTS["LINK_SENT_MESSAGE"], 'status': status.HTTP_200_OK})
 
         token = PasswordResetTokenGenerator.make_token(
             default_token_generator, user)
 
         reset_url = '{}/{}/{}/'.format(USER_CONSTANTS["PASSWORD_RESET_CONFIRM_URL"], user.id, token)
-        
+
         ctx = {
             'name': user.get_short_name(),
             'reset_url': reset_url,
-        } 
+        }
         send_mail(
             'Password Reset Email',
             render_to_string('reset_password_email.txt', ctx),
@@ -96,7 +97,7 @@ class ResetPasswordRequestToken(GenericAPIView):
             html_message=render_to_string('reset_password_email.html', ctx),
         )
 
-        return Response({'data': 'Link has been sent to the valid email address','status': status.HTTP_200_OK})
+        return Response({'data': USER_CONSTANTS["LINK_SENT_MESSAGE"], 'status': status.HTTP_200_OK})
 
 
 class ResetPasswordTokenVerification(GenericAPIView):
@@ -111,14 +112,16 @@ class ResetPasswordTokenVerification(GenericAPIView):
         user = self.get_object()
         token = self.kwargs.get('token')
         if not PasswordResetTokenGenerator.check_token(default_token_generator, user, token):
-            return Response({'data': 'Invalid token', 'status': status.HTTP_400_BAD_REQUEST})
-        print "Valid token"    
+            return Response({'data': 'Invalid token',
+                             'status': status.HTTP_400_BAD_REQUEST})
+        print "Valid token"
         return Response({'status': status.HTTP_200_OK})
 
 
 class ResetPasswordConfirm(GenericAPIView):
     """
-    An Api View which provides a method to reset a password based on a unique token
+    An Api View which provides a method to reset a password based on a unique
+    token
     """
     permission_classes = (AllowAny,)
     serializer_class = PasswordTokenSerializer
@@ -128,7 +131,7 @@ class ResetPasswordConfirm(GenericAPIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         password = serializer.validated_data['password']
-        
+
         token = self.kwargs.get('token')
         user = self.get_object()
 
