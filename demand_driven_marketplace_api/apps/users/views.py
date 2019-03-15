@@ -6,7 +6,7 @@ from django.conf import settings
 from django.shortcuts import render
 from django.template.loader import render_to_string
 
-from rest_framework import mixins, viewsets, status
+from rest_framework import mixins, viewsets, status, permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import GenericAPIView
@@ -107,7 +107,7 @@ class ResetPasswordTokenVerification(GenericAPIView):
     queryset = User.objects.all()
 
     def get(self, request, *args, **kwargs):
-
+        print "Hello"
         user = self.get_object()
         token = self.kwargs.get('token')
         if not PasswordResetTokenGenerator.check_token(default_token_generator, user, token):
