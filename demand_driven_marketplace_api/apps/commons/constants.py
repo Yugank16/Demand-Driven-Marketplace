@@ -18,4 +18,6 @@ USER_CONSTANTS = {
     "O": 'OTHERS',
     "PHONE_NUMBER": 10,
     "GENDER": 8,
+    "PASSWORD_RESET_CONFIRM_URL": "http://localhost:3000/reset-password/confirm",
+    "LINK_SENT_MESSAGE": "Link has been sent to the valid email address"
 }
