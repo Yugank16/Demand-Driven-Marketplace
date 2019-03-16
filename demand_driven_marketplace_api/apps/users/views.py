@@ -17,6 +17,7 @@ from rest_framework.views import APIView
 from apps.users.serializers import UserSerializer, EmailSerializer, ChangePasswordSerializer, PasswordTokenSerializer
 from apps.users.models import User
 from apps.commons.constants import *
+from apps.commons.custom_permissions import *
 
 
 class UserViewSet(mixins.CreateModelMixin,
@@ -63,7 +64,7 @@ class ResetPasswordRequestToken(GenericAPIView):
     An Api View which provides a method to request a password reset token 
     based on an e-mail address
     """
-    permission_classes = (AllowAny,)
+    permission_classes = (AllowAnonymous,)
     serializer_class = EmailSerializer
 
     def post(self, request, *args, **kwargs):
@@ -82,7 +83,7 @@ class ResetPasswordRequestToken(GenericAPIView):
         token = PasswordResetTokenGenerator.make_token(
             default_token_generator, user)
 
-        reset_url = '{}/{}/{}/'.format(USER_CONSTANTS["PASSWORD_RESET_CONFIRM_URL"], user.id, token)
+        reset_url = '{}{}/{}/{}/'.format(settings.LOCALHOST, USER_CONSTANTS["PASSWORD_RESET_CONFIRM_URL"], user.id, token)
 
         ctx = {
             'name': user.get_short_name(),
@@ -104,17 +105,15 @@ class ResetPasswordTokenVerification(GenericAPIView):
     """
     An Api View which checks whether token is valid or not
     """
-    permission_classes = (AllowAny,)
+    permission_classes = (AllowAnonymous,)
     queryset = User.objects.all()
 
     def get(self, request, *args, **kwargs):
-        print "Hello"
         user = self.get_object()
         token = self.kwargs.get('token')
         if not PasswordResetTokenGenerator.check_token(default_token_generator, user, token):
             return Response({'data': 'Invalid token',
                              'status': status.HTTP_400_BAD_REQUEST})
-        print "Valid token"
         return Response({'status': status.HTTP_200_OK})
 
 
@@ -123,7 +122,7 @@ class ResetPasswordConfirm(GenericAPIView):
     An Api View which provides a method to reset a password based on a unique
     token
     """
-    permission_classes = (AllowAny,)
+    permission_classes = (AllowAnonymous,)
     serializer_class = PasswordTokenSerializer
     queryset = User.objects.all()
 

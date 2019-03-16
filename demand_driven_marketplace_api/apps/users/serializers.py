@@ -30,7 +30,6 @@ class UserSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        print validated_data
         validated_data['balance'] = CONSTANTS['INITIAL_BALANCE']
         user = User.objects.create(**validated_data)
         token = Token.objects.create(user=user)
@@ -65,7 +64,6 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         return data
     
     def update(self, instance, validated_data):
-        print validated_data
         validated_data['password'] = make_password(validated_data['new_password'])
         validated_data.pop('new_password')
         instance = super(ChangePasswordSerializer, self).update(instance, validated_data)
