@@ -60,7 +60,6 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if not (check_password(data['password'], self.instance.password)):
             raise ValidationError('Incorrect Old Password')
-        validators.validate_password(data['password'], self.instance)
         if(data['password'] == data['new_password']):
             raise ValidationError('Password can not be same as old password')
         return data
