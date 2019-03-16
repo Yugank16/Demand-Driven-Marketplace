@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.core.validators import RegexValidator
 from django.db import models
 
 from apps.commons.constants import *
@@ -37,12 +38,22 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=USER_CONSTANTS["FIRST_NAME_MAX_LENGTH"])
     last_name = models.CharField(max_length=USER_CONSTANTS["LAST_NAME_MAX_LENGTH"], blank=True)
     balance = models.IntegerField(null=True)
+    GENDER_CHOICES = (
+        (USER_CONSTANTS["M"], 'MALE'),
+        (USER_CONSTANTS["F"], 'FEMALE'),
+        (USER_CONSTANTS["O"], 'OTHERS'),
+    )
+    gender = models.CharField(max_length=USER_CONSTANTS["GENDER"], choices=GENDER_CHOICES, null=True)
+    profile_photo = models.ImageField(upload_to='profile_photo/', null=True)
+    birth_date = models.DateField(null=True)
+    phone_regex = RegexValidator(regex=r'^[6-9]{1}\d{9}$', message="Phone number must contain 10 digits.")
+    phone_number = models.CharField(max_length=USER_CONSTANTS["PHONE_NUMBER"], validators=[phone_regex, ], blank=True)
     USER_TYPE_CHOICES = (
         (1, 'Buyer'),
         (2, 'Seller'),
         (3, 'Both'),
     )
-    user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, null=True)
+    user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, default=3)
     is_admin = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'

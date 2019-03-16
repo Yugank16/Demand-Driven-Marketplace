@@ -15,7 +15,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles',  
     'django_extensions',
     'corsheaders',
     'rest_framework',
@@ -23,7 +23,6 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'debug_toolbar',
     'debug_panel',
-
     'apps.users',
     'apps.groups',
     'apps.items',
@@ -109,5 +108,3 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'users.user'
 
 INTERNAL_IPS = ('127.0.0.1',)
-
-
