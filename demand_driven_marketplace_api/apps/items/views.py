@@ -4,12 +4,16 @@ from django.db.models import Q
 
 from django_filters import rest_framework as filters
 from rest_framework import viewsets, mixins, status
+from rest_framework import filters as filter
 
 from apps.items.models import Item
 from apps.items.serializers import ItemListSerializer, ItemSerializer
 
 
 class ItemFilter(filters.FilterSet):
+    """
+    Item Filter for searching item based on name
+    """
     name = filters.CharFilter(name='name', lookup_expr='icontains')
 
     class Meta(object):
@@ -21,7 +25,9 @@ class ItemViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.Creat
     """
     ItemViewset Provides List Of All Item Request 
     """
+    filter_backends = (filters.DjangoFilterBackend, filter.OrderingFilter)
     filter_class = ItemFilter
+    ordering_fields = ('max_price', 'date_time')
 
     def get_serializer_class(self):
         if self.request.method == 'POST' or self.action == 'retrieve':

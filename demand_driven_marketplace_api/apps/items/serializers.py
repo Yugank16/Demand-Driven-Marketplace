@@ -34,16 +34,3 @@ class ItemSerializer(serializers.ModelSerializer):
         instance = super(ItemSerializer, self).create(validated_data)
         return instance
 
-
-class ItemSerializerGet(serializers.ModelSerializer):
-    """
-    A Item Serializer to get details of Item Request
-    """
-    requester = UserSerializer(read_only=True)
-
-    class Meta(object):
-        model = Item
-        fields = ('id', 'name', 'short_description', 'requester', 'date_time', 'item_state', 'months_old',
-                  'quantity_required', 'max_price', 'more_info', 'item_status')
-
-

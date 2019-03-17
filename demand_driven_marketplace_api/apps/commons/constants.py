@@ -18,6 +18,11 @@ USER_CONSTANTS = {
     "O": 'OTHERS',
     "PHONE_NUMBER": 10,
     "GENDER": 8,
+}
+
+MESSAGE_CONSTANTS = {
+    "PASSWORD_SET": "Password set successfully",
+    "INVALID_TOKEN": "Token not Valid",
     "PASSWORD_RESET_CONFIRM_URL": "reset-password/confirm",
-    "LINK_SENT_MESSAGE": "Link has been sent to the valid email address"
+    "LINK_SENT_MESSAGE": "Link has been sent to the valid email address",
 }

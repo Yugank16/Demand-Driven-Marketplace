@@ -78,12 +78,12 @@ class ResetPasswordRequestToken(GenericAPIView):
             active_user_found = True
 
         if not active_user_found:
-            return Response({'data': USER_CONSTANTS["LINK_SENT_MESSAGE"], 'status': status.HTTP_200_OK})
+            return Response({'data': MESSAGE_CONSTANTS["LINK_SENT_MESSAGE"], 'status': status.HTTP_200_OK})
 
         token = PasswordResetTokenGenerator.make_token(
             default_token_generator, user)
 
-        reset_url = '{}{}/{}/{}/'.format(settings.LOCALHOST, USER_CONSTANTS["PASSWORD_RESET_CONFIRM_URL"], user.id, token)
+        reset_url = '{}{}/{}/{}/'.format(settings.LOCALHOST, MESSAGE_CONSTANTS["PASSWORD_RESET_CONFIRM_URL"], user.id, token)
 
         ctx = {
             'name': user.get_short_name(),
@@ -98,7 +98,7 @@ class ResetPasswordRequestToken(GenericAPIView):
             html_message=render_to_string('reset_password_email.html', ctx),
         )
 
-        return Response({'data': USER_CONSTANTS["LINK_SENT_MESSAGE"], 'status': status.HTTP_200_OK})
+        return Response({'data': MESSAGE_CONSTANTS["LINK_SENT_MESSAGE"], 'status': status.HTTP_200_OK})
 
 
 class ResetPasswordTokenVerification(GenericAPIView):
@@ -112,7 +112,7 @@ class ResetPasswordTokenVerification(GenericAPIView):
         user = self.get_object()
         token = self.kwargs.get('token')
         if not PasswordResetTokenGenerator.check_token(default_token_generator, user, token):
-            return Response({'data': 'Invalid token',
+            return Response({'data': MESSAGE_CONSTANTS["INVALID_TOKEN"],
                              'status': status.HTTP_400_BAD_REQUEST})
         return Response({'status': status.HTTP_200_OK})
 
@@ -135,9 +135,9 @@ class ResetPasswordConfirm(GenericAPIView):
         user = self.get_object()
 
         if not PasswordResetTokenGenerator.check_token(default_token_generator, user, token):
-            return Response({'data': 'Token not Valid', 'status': status.HTTP_400_BAD_REQUEST})
+            return Response({'data': MESSAGE_CONSTANTS["INVALID_TOKEN"], 'status': status.HTTP_400_BAD_REQUEST})
 
         user.set_password(password)
         user.save()
 
-        return Response({'data': 'Password set successfully', 'status': status.HTTP_200_OK})
+        return Response({'data': MESSAGE_CONSTANTS["PASSWORD_SET"], 'status': status.HTTP_200_OK})
