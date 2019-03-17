@@ -19,7 +19,7 @@ class ItemListSerializer(serializers.ModelSerializer):
 
 class ItemSerializer(serializers.ModelSerializer):
     """
-    A Item Serializer To Create New List
+    A Item Serializer To Create New Request
     """
     requester = UserSerializer(read_only=True)
 
@@ -37,7 +37,7 @@ class ItemSerializer(serializers.ModelSerializer):
 
 class ItemSerializerGet(serializers.ModelSerializer):
     """
-    A Item Serializer To Create New List
+    A Item Serializer to get details of Item Request
     """
     requester = UserSerializer(read_only=True)
 

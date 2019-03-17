@@ -8,7 +8,18 @@ from django.conf import settings
 
 class Item(models.Model):
     """
-    Item Model For Storing Item Details Of Requester 
+    Item Model For Storing Item Detail
+
+    name- name of item
+    short_description
+    requester- user requesting for item
+    date_time- when required
+    item_state- whether new, old or second hand
+    months_old- for old items
+    quantity required
+    max_price
+    more_info
+    item_status - pending, active, sold or unsold
     """
     name = models.CharField(max_length=GLOBAL_CONSTANTS["TEXT_SIZE_SMALL"])
     short_description = models.CharField(max_length=GLOBAL_CONSTANTS["TEXT_SIZE_MEDIUM"])
