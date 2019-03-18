@@ -49,6 +49,10 @@ class UserCreateTest(APITestCase):
                                             'first_name': self.user.first_name,
                                             'last_name': self.user.last_name,
                                             'user_type': self.user.user_type,
+                                            'profile_photo': None,
+                                            'birth_date': None,
+                                            'gender': None,
+                                            'phone_number': '',
                                             })
     
 

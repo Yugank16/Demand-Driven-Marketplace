@@ -14,7 +14,7 @@ urlpatterns = [
     }), name='users'),
     url(r'api/users/change-password/$', ChangePassword.as_view({
         'patch': 'partial_update',
-    }), name='users'),
+    }), name='changepassword'),
     url(r'api/login/$', views.obtain_auth_token, name='login'),
     url(r'api/logout/$', Logout.as_view(), name='logout'),
     url(r'^api/password-reset/$',
