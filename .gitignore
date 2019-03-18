@@ -8,6 +8,7 @@ __pycache__/
 *.log
 local_settings.py
 db.sqlite3
+.coverage
 
 # pyenv
 .python-version
@@ -21,5 +22,11 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+# vscode
+.vscode
+
+#media
+media
 
 
