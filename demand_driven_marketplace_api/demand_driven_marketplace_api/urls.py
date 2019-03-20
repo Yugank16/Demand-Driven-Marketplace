@@ -12,12 +12,8 @@ urlpatterns = [
     url(r'^swagger/$', schema_view),
     url(r'', include('apps.users.urls', namespace='users')),
     url(r'', include('apps.items.urls', namespace='items')),
-<<<<<<< HEAD
     url(r'', include('apps.bids.urls', namespace='bids')),
-]
-=======
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
->>>>>>> c14405d0fb50416a71efa5962936e1c985537143
 
 
 if settings.DEBUG:
