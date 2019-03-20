@@ -2,20 +2,31 @@ from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q
 
+from django_filters import rest_framework as filters
 from rest_framework import viewsets, mixins, status
-from rest_framework import filters
+from rest_framework import filters as filter
 
 from apps.items.models import Item
 from apps.items.serializers import ItemListSerializer, ItemSerializer
+
+
+class ItemFilter(filters.FilterSet):
+    """
+    Item Filter for searching item based on name
+    """
+    name = filters.CharFilter(name='name', lookup_expr='icontains')
+
+    class Meta(object):
+        model = Item
+        fields = ['name', ]
 
 
 class ItemViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     """
     ItemViewset Provides List Of All Item Request 
     """
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
-    filter_fields = ('item_status',)
-    search_fields = ('name',)
+    filter_backends = (filters.DjangoFilterBackend, filter.OrderingFilter)
+    filter_class = ItemFilter
     ordering_fields = ('max_price', 'date_time')
 
     def get_serializer_class(self):

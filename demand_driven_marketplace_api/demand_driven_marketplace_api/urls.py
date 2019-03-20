@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.conf.urls.static import static
 
 from rest_framework_swagger.views import get_swagger_view
 
@@ -11,7 +12,7 @@ urlpatterns = [
     url(r'^swagger/$', schema_view),
     url(r'', include('apps.users.urls', namespace='users')),
     url(r'', include('apps.items.urls', namespace='items')),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 if settings.DEBUG:
