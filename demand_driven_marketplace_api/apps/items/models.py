@@ -47,4 +47,5 @@ class Item(models.Model):
     item_status = models.PositiveSmallIntegerField(choices=ITEM_STATUS_CHOICES, default=1)
 
 
-
+    def __unicode__(self):
+        return '{}'.format(self.name)

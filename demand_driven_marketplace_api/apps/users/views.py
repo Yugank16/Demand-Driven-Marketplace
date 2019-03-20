@@ -1,10 +1,8 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.tokens import PasswordResetTokenGenerator, default_token_generator
-from django.core.mail import send_mail
 from django.conf import settings
 from django.shortcuts import render
-from django.template.loader import render_to_string
 
 from rest_framework import mixins, viewsets, status
 from rest_framework.authtoken.models import Token
@@ -16,6 +14,7 @@ from rest_framework.views import APIView
 
 from apps.users.serializers import UserSerializer, EmailSerializer, ChangePasswordSerializer, PasswordTokenSerializer
 from apps.users.models import User
+from apps.users.tasks import send_reset_email_task
 from apps.commons.constants import *
 from apps.commons.custom_permissions import *
 
@@ -84,20 +83,7 @@ class ResetPasswordRequestToken(GenericAPIView):
             default_token_generator, user)
 
         reset_url = '{}{}/{}/{}/'.format(settings.LOCALHOST, MESSAGE_CONSTANTS["PASSWORD_RESET_CONFIRM_URL"], user.id, token)
-
-        ctx = {
-            'name': user.get_short_name(),
-            'reset_url': reset_url,
-        }
-        send_mail(
-            'Password Reset Email',
-            render_to_string('reset_password_email.txt', ctx),
-            'manager@ddm.com',
-            [email],
-            fail_silently=True,
-            html_message=render_to_string('reset_password_email.html', ctx),
-        )
-
+        send_reset_email_task.delay(email, user.get_short_name(), reset_url)
         return Response({'data': MESSAGE_CONSTANTS["LINK_SENT_MESSAGE"], 'status': status.HTTP_200_OK})
 
 
