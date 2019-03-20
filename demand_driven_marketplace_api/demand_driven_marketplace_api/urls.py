@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^swagger/$', schema_view),
     url(r'', include('apps.users.urls', namespace='users')),
     url(r'', include('apps.items.urls', namespace='items')),
+    url(r'', include('apps.bids.urls', namespace='bids')),
 ]
 
 

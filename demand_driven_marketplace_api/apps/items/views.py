@@ -43,4 +43,3 @@ class ItemViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.Creat
     def get_serializer_context(self):
         return {'user': self.request.user}
 
-

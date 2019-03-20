@@ -34,3 +34,4 @@ class ItemSerializer(serializers.ModelSerializer):
         instance = super(ItemSerializer, self).create(validated_data)
         return instance
 
+
