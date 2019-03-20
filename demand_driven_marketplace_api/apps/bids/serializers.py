@@ -78,3 +78,4 @@ class SpecificBidSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Bid
         fields = '__all__'
+    
