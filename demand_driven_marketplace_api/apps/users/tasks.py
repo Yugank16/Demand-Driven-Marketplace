@@ -19,3 +19,4 @@ def send_reset_email_task(email, user_name, reset_url):
             fail_silently=True,
             html_message=render_to_string('reset_password_email.html', ctx),
         )
+     
