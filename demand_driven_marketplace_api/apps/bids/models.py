@@ -36,7 +36,7 @@ class ItemImage(models.Model):
     ItemImage model to save 
     """
     image = models.ImageField(upload_to='bid_item_photo/', null=True)
-    bid = models.ForeignKey(Bid, related_name='itemimage')
+    bid = models.ForeignKey(Bid, related_name='item_image')
 
     def __str__(self):
         return '{}'.format(self.id)

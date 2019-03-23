@@ -16,7 +16,7 @@ class BidPermission(BasePermission):
 
     def has_permission(self, request, view):
         try:
-            item = Item.objects.get(pk=view.kwargs["pk"])
+            item = Item.objects.get(pk=view.kwargs["item_pk"])
         except Item.DoesNotExist:
             item = None
         if(not item):

@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+import datetime
+
 from demand_driven_marketplace_api.settings import AUTH_USER_MODEL
 from apps.items.models import Item
 from apps.users.serializers import UserSerializer
@@ -31,6 +33,7 @@ class ItemSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = self.context['user']
         validated_data["requester"] = user
+        print datetime.datetime.now()
         instance = super(ItemSerializer, self).create(validated_data)
         return instance
 

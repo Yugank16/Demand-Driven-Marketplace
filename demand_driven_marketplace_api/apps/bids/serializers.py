@@ -26,10 +26,10 @@ class BidSerializer(serializers.ModelSerializer):
         fields = ('id', 'bid_price', 'description', 'validity', 'images') 
 
     def create(self, validated_data):
-        item = self.context['item']
+        item_pk = self.context['item_pk']
         user = self.context['user']
         try:
-            item = Item.objects.get(pk=item)
+            item = Item.objects.get(pk=item_pk)
         except Item.DoesNotExist:
             item = None
         if(not item):

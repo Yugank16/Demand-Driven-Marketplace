@@ -10,8 +10,11 @@ urlpatterns = [
         'delete': 'destroy',
         'patch': 'partial_update',
     })),
-    url(r'^api/request/(?P<pk>\d+)/bids/$', BidViewSet.as_view({
+    url(r'^api/request/(?P<item_pk>\d+)/bid/$', BidViewSet.as_view({
         'get': 'list',
         'post': 'create',
+    })),
+    url(r'^api/my-bids/$', BidViewSet.as_view({
+        'get': 'list',
     }))
 ] 
