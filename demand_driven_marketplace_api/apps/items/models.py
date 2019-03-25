@@ -42,8 +42,8 @@ class Item(models.Model):
         (1, 'pending'),
         (2, 'active'),
         (3, 'onhold'),
-        (3, 'sold'),
-        (4, 'unsold'),
+        (4, 'sold'),
+        (5, 'unsold'),
     )
     item_status = models.PositiveSmallIntegerField(choices=ITEM_STATUS_CHOICES, default=1)
 

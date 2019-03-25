@@ -22,13 +22,12 @@ class BidSerializer(serializers.ModelSerializer):
     A Item List Serializer To List All Requests
     """
     images = serializers.ListField(child=serializers.ImageField(), write_only=True)
-    seller = UserSerializer()
-    item = ItemListSerializer()
+    seller = UserSerializer(read_only = True)
+    item = ItemListSerializer(read_only = True)
 
     class Meta(object):
         model = Bid
         fields = ('id', 'bid_price', 'description', 'seller', 'item', 'validity', 'images') 
-        read_only_fields = ('item',)
         
     def create(self, validated_data):
         item_pk = self.context['item_pk']
@@ -53,7 +52,7 @@ class BidSerializer(serializers.ModelSerializer):
         if validated_data["item"].max_price < validated_data["bid_price"]:
             raise serializers.ValidationError("Bid price can not be greater than Max price")
 
-        if validated_data["item"].item_status != ITEM_CONSTANTS["PENDING"]:
+        if validated_data["item"].item_status != ITEM_CONSTANTS["ACTIVE"]:
             raise serializers.ValidationError("Can not bid at this time")
 
         if len(images) != BIDS_CONSTANTS["IMAGE"]:
