@@ -45,6 +45,13 @@ class ItemRequestBid(mixins.CreateModelMixin,
     """
     ItemRequestBid To Create New Bid For An Item Request And List All Bid For An Item
     """
+    serializer_class = BidSerializer
+
+    def get_queryset(self):
+        if self.action == 'list':
+            return Bid.objects.filter(item__id=self.kwargs["item_pk"])
+        return Bid.objects.all()
+
     def get_serializer_context(self):
         return {'user': self.request.user, 'item_pk': self.kwargs["item_pk"]}
             
@@ -53,3 +60,4 @@ class ItemRequestBid(mixins.CreateModelMixin,
             self.permission_classes = [ListBidPermission, ]
         elif self.action == 'create':
             self.permission_classes = [BidPermission, ]
+        return super(ItemRequestBid, self).get_permissions()
