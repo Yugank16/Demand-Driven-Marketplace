@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'apps.users',
     'apps.groups',
     'apps.items',
+    'apps.bids',
 ]
 
 MIDDLEWARE = [
@@ -106,7 +107,7 @@ CELERY_RESULT_SERIALIZER = 'json'
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
