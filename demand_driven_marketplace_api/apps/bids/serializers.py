@@ -83,4 +83,5 @@ class SpecificBidSerializer(serializers.ModelSerializer):
         model = Bid
         fields = '__all__'
         
+        
     
