@@ -1,5 +1,7 @@
+from datetime import datetime,timedelta
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+
 
 from demand_driven_marketplace_api.settings import AUTH_USER_MODEL
 from apps.items.models import Item
@@ -33,5 +35,10 @@ class ItemSerializer(serializers.ModelSerializer):
         validated_data["requester"] = user
         instance = super(ItemSerializer, self).create(validated_data)
         return instance
+
+    def validate_date_time(self, value):
+        if datetime(value.year, value.month, value.day, value.hour, value.minute, 0) - datetime.now() < timedelta(hours=24)  :
+            raise serializers.ValidationError({"date_time": "Required date_time and current date_time should have a difference of atleast 24hrs"})
+        return value    
 
 

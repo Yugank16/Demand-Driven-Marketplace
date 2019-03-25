@@ -37,9 +37,9 @@ class ItemViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.Creat
         elif self.action == 'list':
             return ItemListSerializer
     
-    def get_queryset(self):
+    def get_queryset(self): 
         if self.action == 'list':
-            return Item.objects.exclude(requester=self.request.user).exclude(Q(item_status=3) | Q(item_status=4))
+            return Item.objects.exclude(requester=self.request.user).exclude(item_status__in=[3,4,5])
         return Item.objects.all()
     
     def get_serializer_context(self):
