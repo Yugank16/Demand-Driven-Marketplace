@@ -41,6 +41,7 @@ class Item(models.Model):
     ITEM_STATUS_CHOICES = (
         (1, 'pending'),
         (2, 'active'),
+        (3, 'onhold'),
         (3, 'sold'),
         (4, 'unsold'),
     )

@@ -5,6 +5,8 @@ from rest_framework.exceptions import ValidationError
 
 from apps.bids.models import Bid, ItemImage
 from apps.items.models import Item
+from apps.items.serializers import ItemListSerializer
+from apps.users.serializers import UserSerializer
 from apps.commons.constants import *
 
 
@@ -20,11 +22,14 @@ class BidSerializer(serializers.ModelSerializer):
     A Item List Serializer To List All Requests
     """
     images = serializers.ListField(child=serializers.ImageField(), write_only=True)
+    seller = UserSerializer()
+    item = ItemListSerializer()
 
     class Meta(object):
         model = Bid
-        fields = ('id', 'bid_price', 'description', 'validity', 'images') 
-
+        fields = ('id', 'bid_price', 'description', 'seller', 'item', 'validity', 'images') 
+        read_only_fields = ('item',)
+        
     def create(self, validated_data):
         item_pk = self.context['item_pk']
         user = self.context['user']
@@ -73,7 +78,7 @@ class SpecificBidSerializer(serializers.ModelSerializer):
     """
     Serializer to get particular bid details
     """
-    images = ItemImageSerializer(source='itemimage', many=True, read_only=True)
+    images = ItemImageSerializer(source='item_image', many=True)
     
     class Meta(object):
         model = Bid
