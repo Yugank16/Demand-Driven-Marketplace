@@ -61,4 +61,3 @@ class ItemRequestBid(mixins.CreateModelMixin,
         elif self.action == 'create':
             self.permission_classes = [BidPermission, ]
         return super(ItemRequestBid, self).get_permissions()
-        
