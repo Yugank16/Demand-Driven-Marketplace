@@ -56,6 +56,7 @@ class ItemRequestBid(mixins.CreateModelMixin,
         return {'user': self.request.user, 'item_pk': self.kwargs["item_pk"]}
             
     def get_permissions(self):     
+        
         if self.action == 'list':
             self.permission_classes = [ListBidPermission, ]
         elif self.action == 'create':

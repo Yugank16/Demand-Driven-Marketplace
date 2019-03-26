@@ -46,9 +46,15 @@ class ListBidPermission(BasePermission):
     """
     Item requester is allowed to get list of all the bids on his/her item request
     """
-    def has_object_permission(self, request, view, obj):
+    def has_permission(self, request, view):
         
-        return request.user == obj.requester
+        try:
+            item = Item.objects.get(pk=view.kwargs["item_pk"])
+        except Item.DoesNotExist:
+            item = None
+        if(not item):
+            return False
+        return request.user == item.requester
     
 
 class BidUpdatePermission(BasePermission):

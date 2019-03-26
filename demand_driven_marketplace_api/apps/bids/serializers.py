@@ -22,13 +22,18 @@ class BidSerializer(serializers.ModelSerializer):
     A Item List Serializer To List All Requests
     """
     images = serializers.ListField(child=serializers.ImageField(), write_only=True)
-    seller = UserSerializer()
-    item = ItemListSerializer()
+    seller = UserSerializer(read_only=True)
+    item = ItemListSerializer(read_only=True)
 
     class Meta(object):
         model = Bid
         fields = ('id', 'bid_price', 'description', 'seller', 'item', 'validity', 'images') 
-        read_only_fields = ('item',)
+    
+    def validate(self, data):
+        if(self.instance):
+            if(len(data) > 1 or 3 <= self.instance.validity <= 4 or 3 <= data["validity"] <= 4):
+                raise ValidationError("Can not update the required field")
+        return data
         
     def create(self, validated_data):
         item_pk = self.context['item_pk']
@@ -51,13 +56,13 @@ class BidSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Only One Bid Allowed Per Item Request")
 
         if validated_data["item"].max_price < validated_data["bid_price"]:
-            raise serializers.ValidationError("Bid price can not be greater than Max price")
+            raise serializers.ValidationError({'bid_price': "Bid price can not be greater than Max price"})
 
-        if validated_data["item"].item_status != ITEM_CONSTANTS["PENDING"]:
+        if validated_data["item"].item_status != ITEM_CONSTANTS["ACTIVE"]:
             raise serializers.ValidationError("Can not bid at this time")
 
-        if len(images) != BIDS_CONSTANTS["IMAGE"]:
-            raise serializers.ValidationError("Upload exactly {} images".format(BIDS_CONSTANTS["IMAGE"]))
+        if len(images) < BIDS_CONSTANTS["IMAGE"]:
+            raise serializers.ValidationError({'images': "Upload Atleast {} images".format(BIDS_CONSTANTS["IMAGE"])})
          
         with transaction.atomic():
             instance = super(BidSerializer, self).create(validated_data)
@@ -67,20 +72,16 @@ class BidSerializer(serializers.ModelSerializer):
             ItemImage.objects.bulk_create(item_images)
         return instance
 
-    def update(self, instance, validated_data):
-        
-        if(len(validated_data) != 1 or not instance.validity == BIDS_CONSTANTS["VALID"] or not validated_data["validity"] or validated_data["validity"] != BIDS_CONSTANTS["INVALID"]):
-            raise serializers.ValidationError("Can not Update the required field")
-        return super(BidSerializer, self).update(instance, validated_data)
-
 
 class SpecificBidSerializer(serializers.ModelSerializer):
     """
     Serializer to get particular bid details
     """
     images = ItemImageSerializer(source='item_image', many=True)
-    
+    seller = UserSerializer(read_only=True)
+    item = ItemListSerializer(read_only=True)
+
     class Meta(object):
         model = Bid
-        fields = '__all__'
+        fields = ('id', 'bid_price', 'description', 'seller', 'item', 'validity', 'images') 
     
