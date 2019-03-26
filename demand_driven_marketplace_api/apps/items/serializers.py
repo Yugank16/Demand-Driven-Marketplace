@@ -50,7 +50,6 @@ class ItemSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):      
         selected_bid= Bid.objects.filter(item__id=instance.id, validity= 1).order_by('bid_price').first()  
         if not selected_bid:
-            print "No Bid valid"
             validated_data['item_status']= ITEM_CONSTANTS['UNSOLD']
         else :
             validated_data['item_status']= ITEM_CONSTANTS['SOLD']
