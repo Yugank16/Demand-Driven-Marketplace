@@ -62,5 +62,3 @@ class SelfItemRequest(mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.
         if self.action == 'list':
             return Item.objects.filter(requester=self.request.user)
         return Item.objects.all()
-
-

@@ -83,5 +83,4 @@ class SpecificBidSerializer(serializers.ModelSerializer):
 
     class Meta(object):
         model = Bid
-        fields = ('id', 'bid_price', 'description', 'seller', 'item', 'validity', 'images') 
-    
+        fields = '__all__'

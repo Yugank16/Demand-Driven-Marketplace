@@ -73,7 +73,3 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         validated_data.pop('new_password')
         instance = super(ChangePasswordSerializer, self).update(instance, validated_data)
         return instance
-
-
-
-
