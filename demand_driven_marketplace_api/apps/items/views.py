@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
-from django.db.models import Q
 
 from django_filters import rest_framework as filters
 from rest_framework import viewsets, mixins, status
@@ -8,7 +7,7 @@ from rest_framework import filters as filter
 
 from apps.items.models import Item
 from apps.items.serializers import ItemListSerializer, ItemSerializer
-
+from apps.commons.constants import *
 
 
 class ItemFilter(filters.FilterSet):
@@ -22,7 +21,7 @@ class ItemFilter(filters.FilterSet):
         fields = ['name', 'item_status']
 
 
-class ItemViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
+class ItemViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """
     ItemViewset Provides List Of All Item Request Made By Other Users ,
     Allows To Post A New Item Request and Get Details Of Particular Item Request 
@@ -32,10 +31,9 @@ class ItemViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.Creat
     ordering_fields = ('max_price', 'date_time')
 
     def get_serializer_class(self):
-        if self.request.method == 'POST' or self.action == 'retrieve':
-            return ItemSerializer
-        elif self.action == 'list':
+        if self.action == 'list':
             return ItemListSerializer
+        return ItemSerializer
     
     def get_queryset(self): 
         if self.action == 'list':

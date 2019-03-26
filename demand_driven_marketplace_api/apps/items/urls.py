@@ -9,6 +9,7 @@ urlpatterns = [
     }), name='items'),
     url(r'^api/request-details/(?P<pk>\d+)/$', ItemViewSet.as_view({
         'get': 'retrieve',
+        'patch': 'partial_update',
     }), name='item-detail'),
     url(r'^api/my-requests/$', SelfItemRequest.as_view({
         'get': 'list',

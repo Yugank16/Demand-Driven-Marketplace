@@ -30,6 +30,9 @@ MESSAGE_CONSTANTS = {
 ITEM_CONSTANTS = {
     "PENDING": 1,
     "ACTIVE": 2,
+    "ONHOLD":3,
+    "SOLD": 4,
+    "UNSOLD": 5,
 }
 
 BIDS_CONSTANTS = {

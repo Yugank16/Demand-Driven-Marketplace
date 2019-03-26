@@ -64,13 +64,7 @@ class BidSerializer(serializers.ModelSerializer):
             for x in images:
                 item_images.append(ItemImage(bid_id=instance.id, image=x))
             ItemImage.objects.bulk_create(item_images)
-        return instance
-
-    def update(self, instance, validated_data):
-        
-        if(len(validated_data) != 1 or not instance.validity == BIDS_CONSTANTS["VALID"] or not validated_data["validity"] or validated_data["validity"] != BIDS_CONSTANTS["INVALID"]):
-            raise serializers.ValidationError("Can not Update the required field")
-        return super(BidSerializer, self).update(instance, validated_data)
+        return instance          
 
 
 class SpecificBidSerializer(serializers.ModelSerializer):
