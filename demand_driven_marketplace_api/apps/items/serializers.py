@@ -22,11 +22,10 @@ class ItemSerializer(serializers.ModelSerializer):
     A Item Serializer To Create New Request
     """
     requester = UserSerializer(read_only=True)
-    
+
     class Meta(object):
         model = Item
-        fields = ('id', 'name', 'short_description', 'requester', 'date_time', 'item_state', 'months_old',
-                  'quantity_required', 'max_price', 'more_info', 'item_status')
+        fields = ('id', 'name', 'short_description', 'requester', 'date_time', 'item_state', 'months_old', 'quantity_required', 'min_bid_price', 'max_price', 'more_info', 'item_status')
 
     def create(self, validated_data):
         user = self.context['user']

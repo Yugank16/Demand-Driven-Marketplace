@@ -1,6 +1,7 @@
 from rest_framework.permissions import BasePermission
 from apps.items.models import Item
 from apps.bids.models import Bid
+from apps.commons.constants import *
 
 
 class AllowAnonymous(BasePermission):
@@ -21,7 +22,7 @@ class BidPermission(BasePermission):
             item = None
         if(not item):
             return False
-        return request.user != item.requester
+        return request.user != item.requester and request.user.user_type != USER_CONSTANTS["BUYER"]
  
 
 class BidDeletePermission(BasePermission):
@@ -64,3 +65,12 @@ class BidUpdatePermission(BasePermission):
     def has_object_permission(self, request, view, obj):
         
         return request.user == obj.item.requester
+
+
+class BidPriceUpdatePermission(BasePermission):
+    """
+    Item requester is allowed to change the status of bid from valid to invalid
+    """
+    def has_object_permission(self, request, view, obj):
+        
+        return request.user == obj.seller

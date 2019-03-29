@@ -22,10 +22,10 @@ class Bid(models.Model):
         (UNSOLD, 'Unsold'),
     )
     bid_price = models.PositiveIntegerField()
-    item = models.ForeignKey(Item, related_name='bid')
-    seller = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='bid')
+    item = models.ForeignKey(Item, related_name='bids')
+    seller = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='bids')
     description = models.CharField(max_length=GLOBAL_CONSTANTS["TEXT_SIZE_LARGE"])
-    validity = models.PositiveSmallIntegerField(choices=VALIDITY_CHOICES, default=1)
+    validity = models.PositiveSmallIntegerField(choices=VALIDITY_CHOICES, default=VALID)
 
     def __str__(self):
         return '{}'.format(self.id)
@@ -36,7 +36,7 @@ class ItemImage(models.Model):
     ItemImage model to save 
     """
     image = models.ImageField(upload_to='bid_item_photo/', null=True)
-    bid = models.ForeignKey(Bid, related_name='item_image')
+    bid = models.ForeignKey(Bid, related_name='item_images')
 
     def __str__(self):
         return '{}'.format(self.id)

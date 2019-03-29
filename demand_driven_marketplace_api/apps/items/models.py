@@ -46,9 +46,8 @@ class Item(models.Model):
         (5, 'unsold'),
     )
     item_status = models.PositiveSmallIntegerField(choices=ITEM_STATUS_CHOICES, default=1)
+    min_bid_price = models.PositiveIntegerField(null=True, blank=True)
 
     def __str__(self):
         return '{}'.format(self.id)
 
-    def __unicode__(self):
-        return '{}'.format(self.name)

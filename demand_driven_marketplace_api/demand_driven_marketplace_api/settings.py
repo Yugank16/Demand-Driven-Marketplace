@@ -15,19 +15,20 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',  
+    'django.contrib.staticfiles',
     'django_extensions',
     'django_filters',
-
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_swagger',
     'debug_toolbar',
     'debug_panel',
+    'channels',
     'apps.users',
     'apps.groups',
     'apps.items',
+    'apps.bids',
 ]
 
 MIDDLEWARE = [
@@ -60,8 +61,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     ),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 3
 }
 
 TEMPLATES = [
@@ -87,7 +86,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',   
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -97,7 +96,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-#CELERY STUFF
+CHANNEL_LAYERS = {"default": {"BACKEND": "asgiref.inmemory.ChannelLayer",
+                              "ROUTING": "demand_driven_marketplace_api.routing.channel_routing", }, }
+
+# CELERY STUFF
 CELERY_BROKER_URL = 'redis://localhost:6379'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
