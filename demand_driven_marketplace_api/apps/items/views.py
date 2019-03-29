@@ -57,7 +57,7 @@ class ItemViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.Creat
         return super(BidViewSet, self).get_permissions()
 
 
-class SelfItemRequest(mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+class SelfItemRequest(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     """
     SelfItemRequest Provides List of Item Request Made by The User ,Allows To Delete the Request
     """
@@ -81,7 +81,9 @@ class SelfItemRequest(mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.
         if self.action == 'retrieve':
             self.permission_classes = [ItemRequestPermission, IsAuthenticated]  
         elif self.action == 'destroy':
-            self.permission_classes = [RequestDeletePermission, IsAuthenticated]
+            self.permission_classes = [RequestDeleteUpdatePermission, IsAuthenticated]
+        elif self.action == 'partial_update':
+            self.permission_classes = [RequestDeleteUpdatePermission, IsAuthenticated]
 
         return super(BidViewSet, self).get_permissions()
 
