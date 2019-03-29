@@ -34,3 +34,19 @@ class ItemSerializer(serializers.ModelSerializer):
         return instance
 
 
+class ItemUpdateSerializer(serializers.ModelSerializer):
+    """
+    ItemUpdateSerializer to update time and max_price of item
+    """
+    class Meta(object):
+        model = Item
+        fields = '__all__'
+
+    def validate(self, data):
+        if(self.instance.item_status != 1 or not data.get("max_price") or len(data)>1):
+            raise ValidationError("Can not update the required field")
+        return data
+    
+
+
+
