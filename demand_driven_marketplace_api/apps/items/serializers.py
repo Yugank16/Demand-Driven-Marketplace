@@ -28,9 +28,10 @@ class ItemSerializer(serializers.ModelSerializer):
     
     class Meta(object):
         model = Item
-        fields = ('id', 'name', 'short_description', 'requester', 'date_time', 'item_state', 'months_old',
-                  'quantity_required', 'max_price', 'more_info', 'item_status')
-
+        fields = ('id', 'name', 'short_description', 'requester', 'date_time', 'item_state', 'months_old', 'payment_token',
+                  'quantity_required', 'max_price', 'more_info', 'item_status', 'payment_amount', 'charge_info')
+        read_only_fields= ('payment_amount',)
+        
     def create(self, validated_data):
         user = self.context['user']
         validated_data["requester"] = user
@@ -43,17 +44,24 @@ class ItemSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, data):
-        if self.instance and (self.instance.item_status == ITEM_CONSTANTS['SOLD'] or self.instance.item_status == ITEM_CONSTANTS['UNSOLD'] ):
-            raise ValidationError("Unable to change Status for this item.")
+        if self.instance:
+            if self.instance.item_status in [ITEM_CONSTANTS['SOLD'], ITEM_CONSTANTS['UNSOLD']]:
+                raise ValidationError("Unable to change Status for this item.")
+        else:        
+            payment_amount= int(0.01 * data['max_price'])
+            data['payment_amount']= max(GLOBAL_CONSTANTS['ONE_DOLLAR'], payment_amount)
         return data    
 
-    def update(self, instance, validated_data):      
-        selected_bid= Bid.objects.filter(item__id=instance.id, validity= 1).order_by('bid_price').first()  
-        if not selected_bid:
-            validated_data['item_status']= ITEM_CONSTANTS['UNSOLD']
-        else :
-            validated_data['item_status']= ITEM_CONSTANTS['SOLD']
-            selected_bid.validity= BIDS_CONSTANTS['SOLD']
-            selected_bid.save()
+    def update(self, instance, validated_data):   
+
+        if instance.item_status== ITEM_CONSTANTS['ONHOLD'] : 
+            selected_bid= Bid.objects.filter(item__id=instance.id, validity= BIDS_CONSTANTS['VALID']).order_by('bid_price').first()  
+            if not selected_bid:
+                validated_data['item_status']= ITEM_CONSTANTS['UNSOLD']
+            else :
+                validated_data['item_status']= ITEM_CONSTANTS['SOLD']
+                selected_bid.validity= BIDS_CONSTANTS['SOLD']
+                selected_bid.save()
+
         instance = super(ItemSerializer, self).update(instance, validated_data)
         return instance 

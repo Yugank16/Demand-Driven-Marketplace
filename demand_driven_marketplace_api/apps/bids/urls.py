@@ -14,6 +14,13 @@ urlpatterns = [
         'get': 'list',
         'post': 'create',
     })),
+    url(r'^api/requests/(?P<item_pk>\d+)/bid/$', ItemRequestBid.as_view({
+        'get': 'list',
+        'post': 'create',
+    })),
+    url(r'^api/requests/(?P<item_pk>\d+)/bid/payment/(?P<pk>\d+)/$', ItemRequestBid.as_view({
+        'patch': 'partial_update',
+    })),
     url(r'^api/my-bids/$', BidViewSet.as_view({
         'get': 'list',
     }))

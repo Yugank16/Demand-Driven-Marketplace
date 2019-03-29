@@ -3,6 +3,7 @@ GLOBAL_CONSTANTS = {
     "TEXT_SIZE_MEDIUM": 128,
     "TEXT_SIZE_LARGE": 512,
     "TEXT_SIZE_DETAIL": 5000,
+    "ONE_DOLLAR":100,
 }
 
 
@@ -33,6 +34,9 @@ ITEM_CONSTANTS = {
     "ONHOLD":3,
     "SOLD": 4,
     "UNSOLD": 5,
+    "PAYMENT_PENDING": 6,
+
+    "DEFAULT_PRICE":0,
 }
 
 BIDS_CONSTANTS = {
@@ -40,5 +44,6 @@ BIDS_CONSTANTS = {
     "INVALID": 2,
     "SOLD": 3,
     "UNSOLD": 4,
+    "PENDING":5,
     "IMAGE": 6,
 }

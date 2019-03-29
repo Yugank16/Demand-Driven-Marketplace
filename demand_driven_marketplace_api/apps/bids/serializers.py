@@ -27,7 +27,7 @@ class BidSerializer(serializers.ModelSerializer):
 
     class Meta(object):
         model = Bid
-        fields = ('id', 'bid_price', 'description', 'seller', 'item', 'validity', 'images') 
+        fields = ('id', 'bid_price', 'description', 'seller', 'item', 'validity', 'images', 'payment_token', 'charge_info') 
     
     def validate(self, data):
         if(self.instance):
@@ -45,7 +45,7 @@ class BidSerializer(serializers.ModelSerializer):
         if(not item):
             raise serializers.ValidationError("Item does not exist")
 
-        validated_data["validity"] = BIDS_CONSTANTS["VALID"]
+        validated_data["validity"] = BIDS_CONSTANTS['PENDING']
         validated_data["item"] = item
         validated_data["seller"] = user
 
@@ -84,3 +84,13 @@ class SpecificBidSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = Bid
         fields = '__all__'
+
+class UpdateBidPaymentSerializer(serializers.ModelSerializer):
+    """
+    Serializer to retry payment for bidding
+    """
+    class Meta(object):
+        model = Bid
+        fields = ('id', 'validity', 'payment_token', 'charge_info')
+    
+    
