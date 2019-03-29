@@ -90,6 +90,7 @@ class ItemRequestBid(mixins.CreateModelMixin,
                     currency='usd',
                     description='Bidding Charge',
                     source=data['payment_token'],
+                    capture= true,
                 )
                 data['charge_info'] = charge
                 data['validity'] = BIDS_CONSTANTS['VALID']

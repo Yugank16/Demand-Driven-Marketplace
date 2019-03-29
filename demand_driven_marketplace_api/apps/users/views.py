@@ -125,5 +125,4 @@ class ResetPasswordConfirm(GenericAPIView):
 
         user.set_password(password)
         user.save()
-
         return Response({'data': MESSAGE_CONSTANTS["PASSWORD_SET"], 'status': status.HTTP_200_OK})
