@@ -119,7 +119,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-
+MEDIA_ROOT = './media'
 AUTH_USER_MODEL = 'users.user'
 
 INTERNAL_IPS = ('127.0.0.1',)

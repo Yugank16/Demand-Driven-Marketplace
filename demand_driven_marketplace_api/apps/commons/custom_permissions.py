@@ -14,7 +14,9 @@ class AllowAnonymous(BasePermission):
 
 
 class BidPermission(BasePermission):
-
+    """
+    Bid permission is not for item requester and user type buyer
+    """
     def has_permission(self, request, view):
         try:
             item = Item.objects.get(pk=view.kwargs["item_pk"])
@@ -23,6 +25,15 @@ class BidPermission(BasePermission):
         if(not item):
             return False
         return request.user != item.requester and request.user.user_type != USER_CONSTANTS["BUYER"]
+
+
+class MyBidsRetrievePermission(BasePermission):
+    """
+    Self Bids List is not available for buyer
+    """
+    def has_permission(self, request, view):
+
+        return request.user.user_type != USER_CONSTANTS["BUYER"]
  
 
 class BidDeletePermission(BasePermission):

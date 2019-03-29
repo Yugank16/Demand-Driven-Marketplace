@@ -4,6 +4,7 @@ from django.db.models import Q
 from django_filters import rest_framework as filters
 
 from rest_framework import viewsets, mixins, status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import filters as filter
 
 from apps.items.models import Item
@@ -54,7 +55,7 @@ class ItemViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.Creat
         elif self.request.method == 'POST':
             self.permission_classes = [ItemRequestPermission, IsAuthenticated]
 
-        return super(BidViewSet, self).get_permissions()
+        return super(ItemViewSet, self).get_permissions()
 
 
 class SelfItemRequest(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
@@ -78,13 +79,13 @@ class SelfItemRequest(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.Des
     
     def get_permissions(self):
 
-        if self.action == 'retrieve':
+        if self.action == 'list':
             self.permission_classes = [ItemRequestPermission, IsAuthenticated]  
         elif self.action == 'destroy':
             self.permission_classes = [RequestDeleteUpdatePermission, IsAuthenticated]
         elif self.action == 'partial_update':
             self.permission_classes = [RequestDeleteUpdatePermission, IsAuthenticated]
 
-        return super(BidViewSet, self).get_permissions()
+        return super(SelfItemRequest, self).get_permissions()
 
 
