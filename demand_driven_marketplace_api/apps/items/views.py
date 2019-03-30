@@ -2,16 +2,19 @@ from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from django.conf import settings
 
+from django.db.models import Q
 from django_filters import rest_framework as filters
+
 from rest_framework import viewsets, mixins, status
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import filters as filter
 import stripe
 
 from apps.items.models import Item
 from apps.items.serializers import ItemListSerializer, ItemSerializer
 from apps.commons.constants import *
-
+from apps.items.permissions import *
 
 
 class ItemFilter(filters.FilterSet):
@@ -19,7 +22,7 @@ class ItemFilter(filters.FilterSet):
     Item Filter for searching item based on name
     """
     name = filters.CharFilter(name='name', lookup_expr='icontains')
-    
+
     class Meta(object):
         model = Item
         fields = ['name', 'item_status']
@@ -28,7 +31,7 @@ class ItemFilter(filters.FilterSet):
 class ItemViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """
     ItemViewset Provides List Of All Item Request Made By Other Users ,
-    Allows To Post A New Item Request and Get Details Of Particular Item Request 
+    Allows To Post A New Item Request and Get Details Of Particular Item Request
     """
     filter_backends = (filters.DjangoFilterBackend, filter.OrderingFilter)
     filter_class = ItemFilter
@@ -88,20 +91,32 @@ class ItemViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.Creat
     
     
     def get_serializer_class(self):
+
         if self.action == 'list':
             return ItemListSerializer
         return ItemSerializer
-    
-    def get_queryset(self): 
+        
+    def get_queryset(self):
         if self.action == 'list':
             return Item.objects.exclude(requester=self.request.user).exclude(item_status__in=[ITEM_CONSTANTS['ONHOLD'],ITEM_CONSTANTS['SOLD'], ITEM_CONSTANTS['UNSOLD'],ITEM_CONSTANTS['PAYMENT_PENDING']])
         return Item.objects.all()
     
     def get_serializer_context(self):
         return {'user': self.request.user}
+    
+    def get_permissions(self):
+
+        if self.action == 'retrieve':
+            self.permission_classes = [RequestRetrievePermission, IsAuthenticated]  
+        elif self.action == 'list':
+            self.permission_classes = [ListAllRequestsPermission, IsAuthenticated]
+        elif self.request.method == 'POST':
+            self.permission_classes = [ItemRequestPermission, IsAuthenticated]
+
+        return super(ItemViewSet, self).get_permissions()
 
 
-class SelfItemRequest(mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+class SelfItemRequest(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     """
     SelfItemRequest Provides List of Item Request Made by The User ,Allows To Delete the Request
     """
@@ -119,3 +134,16 @@ class SelfItemRequest(mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.
         if self.action == 'list':
             return Item.objects.filter(requester=self.request.user)
         return Item.objects.all()
+    
+    def get_permissions(self):
+
+        if self.action == 'list':
+            self.permission_classes = [ItemRequestPermission, IsAuthenticated]  
+        elif self.action == 'destroy':
+            self.permission_classes = [RequestDeleteUpdatePermission, IsAuthenticated]
+        elif self.action == 'partial_update':
+            self.permission_classes = [RequestDeleteUpdatePermission, IsAuthenticated]
+
+        return super(SelfItemRequest, self).get_permissions()
+
+

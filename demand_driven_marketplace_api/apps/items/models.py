@@ -51,9 +51,8 @@ class Item(models.Model):
     )
     item_status = models.PositiveSmallIntegerField(choices=ITEM_STATUS_CHOICES, default=ITEM_CONSTANTS['PAYMENT_PENDING'])
     charge_info= JSONField(blank= True, null=True)
+    min_bid_price = models.PositiveIntegerField(null=True, blank=True)
 
     def __str__(self):
         return '{}'.format(self.name)
 
-    def __unicode__(self):
-        return '{}'.format(self.name)

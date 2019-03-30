@@ -26,5 +26,13 @@ venv.bak/
 # vscode
 .vscode
 
+<<<<<<< HEAD
 celerybeat-schedule
 redis-5.0.4
+=======
+#media
+media
+
+
+
+>>>>>>> 720e43a2829388f638022408b65f8adebac55852

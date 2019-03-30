@@ -19,6 +19,9 @@ USER_CONSTANTS = {
     "O": 'OTHERS',
     "PHONE_NUMBER": 10,
     "GENDER": 8,
+    "BUYER": 1,
+    "SELLER": 2,
+    "BOTH": 3,
 }
 
 MESSAGE_CONSTANTS = {
@@ -47,3 +50,4 @@ BIDS_CONSTANTS = {
     "PENDING":5,
     "IMAGE": 6,
 }
+

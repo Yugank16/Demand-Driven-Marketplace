@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 import stripe
 
 from apps.bids.models import Bid
-from apps.bids.serializers import BidSerializer, SpecificBidSerializer, UpdateBidPaymentSerializer
+from apps.bids.serializers import BidSerializer, SpecificBidSerializer, UpdateBidPaymentSerializer, UpdateBidPriceSerializer
 from apps.commons.custom_permissions import *
 from apps.commons.constants import *
 
@@ -35,11 +35,11 @@ class BidViewSet(mixins.ListModelMixin,
     def get_permissions(self):
 
         if self.action == 'retrieve':
-            self.permission_classes = [BidRetrievePermission, ]     
+            self.permission_classes = [BidRetrievePermission, IsAuthenticated]     
         elif self.action == 'destroy':
-            self.permission_classes = [BidDeletePermission, ]
+            self.permission_classes = [BidDeletePermission, IsAuthenticated]
         elif self.action == 'partial_update':
-            self.permission_classes = [BidUpdatePermission, ]
+            self.permission_classes = [BidUpdatePermission, IsAuthenticated]
         return super(BidViewSet, self).get_permissions()
 
 
@@ -116,7 +116,16 @@ class ItemRequestBid(mixins.CreateModelMixin,
     def get_permissions(self):     
         
         if self.action == 'list':
-            self.permission_classes = [ListBidPermission, ]
+            self.permission_classes = [ListBidPermission, IsAuthenticated]
         elif self.action == 'create':
-            self.permission_classes = [BidPermission, ]
+            self.permission_classes = [BidPermission, IsAuthenticated]
         return super(ItemRequestBid, self).get_permissions()
+
+
+class PriceUpdate(mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    """
+    PriceUpdate For Seller To Update The Price During Bid
+    """
+    permission_classes = (IsAuthenticated, BidPriceUpdatePermission)
+    serializer_class = UpdateBidPriceSerializer
+    queryset = Bid.objects.all()

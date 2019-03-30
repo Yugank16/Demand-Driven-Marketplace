@@ -2,7 +2,7 @@ from django.conf.urls import include, url
 from django.conf import settings
 from django.conf.urls.static import static
 
-from apps.bids.views import BidViewSet, ItemRequestBid
+from apps.bids.views import BidViewSet, ItemRequestBid, PriceUpdate
 
 urlpatterns = [
     url(r'^api/bid/(?P<pk>\d+)/$', BidViewSet.as_view({
@@ -23,5 +23,8 @@ urlpatterns = [
     })),
     url(r'^api/my-bids/$', BidViewSet.as_view({
         'get': 'list',
-    }))
+    })),
+    url(r'^api/update-bid/(?P<pk>\d+)/$', PriceUpdate.as_view({
+        'patch': 'partial_update',
+    })),
 ] 
