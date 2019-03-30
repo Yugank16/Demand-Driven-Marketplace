@@ -33,7 +33,7 @@ class BidSerializer(serializers.ModelSerializer):
 
         if(self.instance):
             if(len(data) > 1 or not data.get('validity') or 3 <= self.instance.validity <= 4 
-            or 3 <= data["validity"] <= 4):
+            or BIDS_CONSTANTS['SOLD'] <= data["validity"] <= BIDS_CONSTANTS['UNSOLD']):
                 raise ValidationError("Can not update the required field")
         else:
             item_pk = self.context['item_pk']
