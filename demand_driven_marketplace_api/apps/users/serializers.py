@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 import django.contrib.auth.password_validation as validators
 from django.contrib.auth.hashers import check_password
 
-
+from datetime import datetime, date
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
@@ -25,7 +25,12 @@ class UserSerializer(serializers.ModelSerializer):
     
     def validate_password(self, password):
         return make_password(password)
-    
+
+    def validate_birth_date(self, value):
+        if datetime(value.year, value.month, value.day) >= datetime.now().today() :
+            raise serializers.ValidationError({"birth_date": "Birth Date should be valid"})
+        return value
+
     def validate(self, data):
         return data
 
@@ -60,15 +65,11 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         if not (check_password(data['password'], self.instance.password)):
             raise ValidationError('Incorrect Old Password')
         if(data['password'] == data['new_password']):
-            raise ValidationError('Password can not be same as old password')
-        return data
+            raise ValidationError('Password can not be same as old password')    
+        return data    
     
     def update(self, instance, validated_data):
         validated_data['password'] = make_password(validated_data['new_password'])
         validated_data.pop('new_password')
         instance = super(ChangePasswordSerializer, self).update(instance, validated_data)
         return instance
-
-
-
-

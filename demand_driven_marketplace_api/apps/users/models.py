@@ -81,3 +81,4 @@ class User(AbstractBaseUser):
  
     def __unicode__(self):
         return '{}'.format(self.first_name)
+

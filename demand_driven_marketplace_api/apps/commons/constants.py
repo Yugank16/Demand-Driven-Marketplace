@@ -26,3 +26,19 @@ MESSAGE_CONSTANTS = {
     "PASSWORD_RESET_CONFIRM_URL": "reset-password/confirm",
     "LINK_SENT_MESSAGE": "Link has been sent to the valid email address",
 }
+
+ITEM_CONSTANTS = {
+    "PENDING": 1,
+    "ACTIVE": 2,
+    "ONHOLD":3,
+    "SOLD": 4,
+    "UNSOLD": 5,
+}
+
+BIDS_CONSTANTS = {
+    "VALID": 1,
+    "INVALID": 2,
+    "SOLD": 3,
+    "UNSOLD": 4,
+    "IMAGE": 6,
+}

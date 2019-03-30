@@ -1,9 +1,9 @@
 from __future__ import unicode_literals
 
+from django.conf import settings
 from django.db import models
 
 from apps.commons.constants import GLOBAL_CONSTANTS
-from django.conf import settings
 
 
 class Item(models.Model):
@@ -41,11 +41,14 @@ class Item(models.Model):
     ITEM_STATUS_CHOICES = (
         (1, 'pending'),
         (2, 'active'),
-        (3, 'sold'),
-        (4, 'unsold'),
+        (3, 'onhold'),
+        (4, 'sold'),
+        (5, 'unsold'),
     )
     item_status = models.PositiveSmallIntegerField(choices=ITEM_STATUS_CHOICES, default=1)
 
+    def __str__(self):
+        return '{}'.format(self.name)
 
     def __unicode__(self):
         return '{}'.format(self.name)

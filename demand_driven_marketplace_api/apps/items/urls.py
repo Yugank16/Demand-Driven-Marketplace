@@ -1,6 +1,6 @@
 from django.conf.urls import include, url
 
-from apps.items.views import ItemViewSet
+from apps.items.views import ItemViewSet, SelfItemRequest
 
 urlpatterns = [
     url(r'^api/requests/$', ItemViewSet.as_view({
@@ -9,5 +9,14 @@ urlpatterns = [
     }), name='items'),
     url(r'^api/request-details/(?P<pk>\d+)/$', ItemViewSet.as_view({
         'get': 'retrieve',
-    }))
+        'patch': 'partial_update',
+    }), name='item-detail'),
+    url(r'^api/my-requests/$', SelfItemRequest.as_view({
+        'get': 'list',
+    }), name='my-requests'),
+    url(r'^api/my-request/delete/(?P<pk>\d+)/$', SelfItemRequest.as_view({
+        'delete': 'destroy',
+    }), name='request-delete'),
+
 ]
+

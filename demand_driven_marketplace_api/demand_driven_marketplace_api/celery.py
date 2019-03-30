@@ -5,13 +5,13 @@ from django.conf import settings
 
 from celery import Celery
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'demand_driven_marketplace_api.local_settings')
-
+exists = os.path.exists('demand_driven_marketplace_api/local_settings.py')
+if exists:
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "demand_driven_marketplace_api.local_settings")
+else:
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "demand_driven_marketplace_api.settings")
+    
 app = Celery('demand_driven_marketplace_api')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
-app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
-
-@app.task(bind=True)
-def debug_task(self):
-    print('Request: {0!r}'.format(self.request))
+app.autodiscover_tasks()
