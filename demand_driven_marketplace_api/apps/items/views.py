@@ -54,7 +54,7 @@ class ItemViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.Creat
             self.permission_classes = [ListAllRequestsPermission, IsAuthenticated]
         elif self.request.method == 'POST':
             self.permission_classes = [ItemRequestPermission, IsAuthenticated]
-
+        
         return super(ItemViewSet, self).get_permissions()
 
 

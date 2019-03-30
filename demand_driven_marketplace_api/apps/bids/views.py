@@ -36,6 +36,8 @@ class BidViewSet(mixins.ListModelMixin,
             self.permission_classes = [BidDeletePermission, IsAuthenticated]
         elif self.action == 'partial_update':
             self.permission_classes = [BidUpdatePermission, IsAuthenticated]
+        elif self.action == 'list':
+            self.permission_classes = [MyBidsRetrievePermission, IsAuthenticated]
         return super(BidViewSet, self).get_permissions()
 
 
