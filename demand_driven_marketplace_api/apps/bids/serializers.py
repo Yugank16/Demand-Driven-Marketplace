@@ -27,7 +27,7 @@ class BidSerializer(serializers.ModelSerializer):
 
     class Meta(object):
         model = Bid
-        fields = ('id', 'bid_price', 'description', 'seller', 'item', 'validity', 'images') 
+        fields = ('id', 'bid_price', 'description', 'seller', 'item', 'validity', 'images', 'payment_token', 'charge_info') 
     
     def validate(self, data):
 
@@ -102,6 +102,24 @@ class UpdateBidPriceSerializer(serializers.ModelSerializer):
         if(data["bid_price"] > self.instance.item.max_price):
             raise ValidationError({'bid_price': "Bid price can not be greater than ask price by requester"})
         return data
+
+
+class UpdateBidPaymentSerializer(serializers.ModelSerializer):
+    """
+    Serializer to retry payment for bidding
+    """
+    class Meta(object):
+        model = Bid
+        fields = ('id', 'validity', 'payment_token', 'charge_info')
+
+
+class CheckBidForItemSerializer(serializers.ModelSerializer):
+    """
+    Serializer to check bids for Item request
+    """
+    class Meta(object):
+        model = Bid
+        fields = ('id',)
 
             
     
