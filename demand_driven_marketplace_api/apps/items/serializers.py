@@ -41,7 +41,7 @@ class ItemSerializer(serializers.ModelSerializer):
 
     def validate_date_time(self, value):
         if datetime(value.year, value.month, value.day, value.hour, value.minute, 0) - datetime.now() < timedelta(hours=24):
-            raise serializers.ValidationError({"date_time": "Required date_time and current date_time should have a difference of atleast 24hrs"})
+            raise ValidationError('Required by date time should be atleast 24hrs from now')
         return value
 
     def validate(self, data):

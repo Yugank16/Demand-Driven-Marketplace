@@ -15,7 +15,7 @@ def change_item_status():
     for item in items:
         item.item_status = ITEM_CONSTANTS['ACTIVE']
         item.save()
-    items = Item.objects.filter(date_time__date= date.today(), date_time__hour= datetime.now().hour, date_time__minute=datetime.now().minute)
+    items = Item.objects.filter(date_time__date=date.today(), date_time__hour=datetime.now().hour, date_time__minute=datetime.now().minute)
     for item in items:
         item.item_status = ITEM_CONSTANTS['ONHOLD']
         item.save()    
