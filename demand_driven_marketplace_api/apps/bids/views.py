@@ -142,3 +142,13 @@ class CheckBidForRequest(mixins.ListModelMixin, viewsets.GenericViewSet):
 
     def get_queryset(self):
         return Bid.objects.filter(item__id=self.kwargs['item_pk'], seller=self.request.user)
+
+
+class SoldBid(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    View to get details of sold bid against an item request
+    """
+    serializer_class = BidSerializer
+
+    def get_queryset(self):
+        return Bid.objects.filter(item__id=self.kwargs['item_pk'], validity=BIDS_CONSTANTS["SOLD"])

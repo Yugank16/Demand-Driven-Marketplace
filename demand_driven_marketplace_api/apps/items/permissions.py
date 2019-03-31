@@ -27,7 +27,7 @@ class RequestRetrievePermission(BasePermission):
     """
     def has_object_permission(self, request, view, obj):
         
-        return not (request.user.user_type == USER_CONSTANTS["BUYER"] and obj.requester != request.user) 
+        return not (obj.requester != request.user and obj.item_status >= ITEM_CONSTANTS["ONHOLD"]) and not (request.user.user_type == USER_CONSTANTS["BUYER"] and obj.requester != request.user) 
 
 
 class RequestDeleteUpdatePermission(BasePermission):
