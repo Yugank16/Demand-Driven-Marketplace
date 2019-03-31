@@ -60,10 +60,11 @@ class ItemRequestBid(mixins.CreateModelMixin,
         response_data = serializer.data
         try:
             charge = stripe.Charge.create(
-                amount=100,
+                amount=GLOBAL_CONSTANTS['ONE_DOLLAR'],
                 currency='usd',
                 description='Bidding Charge',
                 source=token,
+                capture=True,
             )
             serializer.instance.charge_info = charge
             serializer.instance.validity = BIDS_CONSTANTS['VALID']

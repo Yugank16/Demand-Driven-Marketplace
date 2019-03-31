@@ -7,6 +7,5 @@ from django.db.models import Min
 import json
 
 def ws_connect(message, pk):
-    print message.content["path"]
     message.reply_channel.send({"accept": True, })
     Group("item-{}".format(pk)).add(message.reply_channel)

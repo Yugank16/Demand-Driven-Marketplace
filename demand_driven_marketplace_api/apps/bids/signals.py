@@ -16,9 +16,7 @@ def updatebid(sender, instance, **kwargs):
         "min_price": min_price,
     }
     Group("item-{}".format(instance.item.id)).send({"text": json.dumps(message)})
-    channel_layer = get_channel_layer()
-    ch_group_list = channel_layer.group_channels("item-{}".format(instance.item.id))
-    print "hello", len(ch_group_list)
     item.min_bid_price = min_price
     item.save()
+
     
