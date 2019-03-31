@@ -49,8 +49,8 @@ class ItemSerializer(serializers.ModelSerializer):
             if self.instance.item_status in [ITEM_CONSTANTS['SOLD'], ITEM_CONSTANTS['UNSOLD']]:
                 raise ValidationError("Unable to change Status for this item.")
         else:        
-            payment_amount = int(0.01 * data['max_price'])
-            data['payment_amount'] = max(GLOBAL_CONSTANTS['ONE_DOLLAR'], payment_amount)
+            payment_amount= int(ITEM_CONSTANTS['ONE_PERCENT'] * data['max_price'])
+            data['payment_amount']= max(GLOBAL_CONSTANTS['ONE_DOLLAR'], payment_amount)
         return data    
 
     def update(self, instance, validated_data):   
@@ -77,7 +77,7 @@ class ItemUpdateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate(self, data):
-        if(self.instance.item_status != 1 or len(data) > 2):
+        if(self.instance.item_status != ITEM_CONSTANTS['PENDING'] or not data.get("max_price") or len(data)>1):
             raise ValidationError("Can not update the required field")
         if datetime(data.date_time.year, data.date_time.month, data.date_time.day, data.date_time.hour, data.date_time.minute, 0) - self.instance.create_date_time < timedelta(hours=24):
             raise ValidationError({'date_time': 'Required by date time should be atlest 24 hrs after the request made'})

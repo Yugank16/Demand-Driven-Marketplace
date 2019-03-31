@@ -141,9 +141,7 @@ class SelfItemRequest(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.Des
 
         if self.action == 'list':
             self.permission_classes = [ItemRequestPermission, IsAuthenticated]  
-        elif self.action == 'destroy':
-            self.permission_classes = [RequestDeleteUpdatePermission, IsAuthenticated]
-        elif self.action == 'partial_update':
+        else:
             self.permission_classes = [RequestDeleteUpdatePermission, IsAuthenticated]
 
         return super(SelfItemRequest, self).get_permissions()

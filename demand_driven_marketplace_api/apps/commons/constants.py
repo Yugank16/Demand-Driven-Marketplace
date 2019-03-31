@@ -38,7 +38,7 @@ ITEM_CONSTANTS = {
     "SOLD": 4,
     "UNSOLD": 5,
     "PAYMENT_PENDING": 6,
-
+    "ONE_PERCENT": 0.01,
     "DEFAULT_PRICE":0,
 }
 
