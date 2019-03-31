@@ -36,4 +36,4 @@ class RequestDeleteUpdatePermission(BasePermission):
     """
     def has_object_permission(self, request, view, obj):
         
-        return request.user == obj.requester
+        return request.user == obj.requester and obj.item_status == ITEM_CONSTANTS["PENDING"]

@@ -12,7 +12,7 @@ from rest_framework import filters as filter
 import stripe
 
 from apps.items.models import Item
-from apps.items.serializers import ItemListSerializer, ItemSerializer
+from apps.items.serializers import ItemListSerializer, ItemSerializer, ItemUpdateSerializer
 from apps.commons.constants import *
 from apps.items.permissions import *
 
@@ -44,22 +44,22 @@ class ItemViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.Creat
         stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
         token = serializer.data['payment_token']
         response_data = serializer.data
-        try:
-            charge = stripe.Charge.create(
+        # try:
+        charge = stripe.Charge.create(
                 amount=serializer.data['payment_amount'],
                 currency='usd',
                 description='Posting Item Request Charge',
                 source=token,
             )
-            serializer.instance.charge_info = charge
-            serializer.instance.item_status = ITEM_CONSTANTS['PENDING']
-            serializer.instance.save()
+        serializer.instance.charge_info = charge
+        serializer.instance.item_status = ITEM_CONSTANTS['PENDING']
+        serializer.instance.save()
             
-            response_data['charge_info'] = charge
-            response_data['item_status'] = ITEM_CONSTANTS['PENDING']
+        response_data['charge_info'] = charge
+        response_data['item_status'] = ITEM_CONSTANTS['PENDING']    
             
-        except:
-            pass    
+        # except:
+        #     pass    
         
         headers = self.get_success_headers(response_data)
         return Response(response_data, status=status.HTTP_201_CREATED, headers=headers)    
@@ -128,6 +128,8 @@ class SelfItemRequest(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.Des
     def get_serializer_class(self):
         if self.action == 'list':
             return ItemListSerializer
+        elif self.action == 'partial_update':
+            return ItemUpdateSerializer
         return ItemSerializer
     
     def get_queryset(self):
