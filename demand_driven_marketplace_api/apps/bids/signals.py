@@ -8,9 +8,9 @@ from channels.asgi import get_channel_layer
 import json
 
 @receiver([post_save, post_delete], sender=Bid)
-def updatebid(sender, instance, **kwargs):
-    min_price = Bid.objects.filter(item=instance.item).aggregate(Min('bid_price'))  
-    min_price = min_price["bid_price__min"]
+def updateBid(sender, instance, **kwargs):
+    min_price = Bid.objects.filter(item=instance.item).aggregate(min_bid_price=Min('bid_price'))
+    min_price = min_price["min_bid_price"]
     item = Item.objects.get(pk=instance.item.id)
     message = {
         "min_price": min_price,
