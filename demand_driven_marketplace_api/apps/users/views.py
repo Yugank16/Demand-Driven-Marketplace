@@ -82,7 +82,7 @@ class ResetPasswordRequestToken(GenericAPIView):
         token = PasswordResetTokenGenerator.make_token(
             default_token_generator, user)
 
-        reset_url = '{}{}/{}/{}/'.format(settings.LOCALHOST, MESSAGE_CONSTANTS["PASSWORD_RESET_CONFIRM_URL"], user.id, token)
+        reset_url = '{}{}/{}/{}/'.format(settings.WEBAPP_BASE_URL, MESSAGE_CONSTANTS["PASSWORD_RESET_CONFIRM_URL"], user.id, token)
         send_reset_email_task.delay(email, user.get_short_name(), reset_url)
         return Response({'data': MESSAGE_CONSTANTS["LINK_SENT_MESSAGE"], 'status': status.HTTP_200_OK})
 

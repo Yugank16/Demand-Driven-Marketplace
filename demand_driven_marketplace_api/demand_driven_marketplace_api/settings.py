@@ -145,5 +145,5 @@ SWAGGER_SETTINGS = {
 EMAIL_HOST = '127.0.0.1'
 EMAIL_PORT = 1025
 
-LOCALHOST = "http://localhost:3000/"
+WEBAPP_BASE_URL = "http://localhost:3000/"
 DDM_MANAGER = "manager@ddm.com"
