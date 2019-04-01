@@ -133,7 +133,7 @@ class PriceUpdate(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """
     PriceUpdate For Seller To Update The Price Of Bid While Item Is Live
     """
-    permission_classes = (IsAuthenticated, BidPriceUpdatePermission)
+    permission_classes = (IsAuthenticated, BidDeleteUpdatePermission)
     serializer_class = UpdateBidPriceSerializer
     queryset = Bid.objects.all()
 

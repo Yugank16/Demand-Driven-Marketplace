@@ -77,7 +77,7 @@ class ItemUpdateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate(self, data):
-        if(self.instance.item_status != ITEM_CONSTANTS['PENDING'] or not data.get("max_price") or len(data)>1):
+        if(self.instance.item_status != ITEM_CONSTANTS['PENDING'] or not data.get("max_price")):
             raise ValidationError("Can not update the required field")
         if datetime(data.date_time.year, data.date_time.month, data.date_time.day, data.date_time.hour, data.date_time.minute, 0) - self.instance.create_date_time < timedelta(hours=24):
             raise ValidationError({'date_time': 'Required by date time should be atlest 24 hrs after the request made'})

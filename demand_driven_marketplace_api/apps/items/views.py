@@ -118,7 +118,8 @@ class ItemViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.Creat
 
 class SelfItemRequest(mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     """
-    SelfItemRequest Provides List of Item Request Made by The User ,Allows To Delete the Request
+    SelfItemRequest Provides List of Item Request Made by The User ,Allows To Delete the Request 
+    and Update the item request
     """
 
     filter_backends = (filters.DjangoFilterBackend, filter.OrderingFilter)

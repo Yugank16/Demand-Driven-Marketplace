@@ -2,9 +2,6 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
-SECRET_KEY = '6p@m9g4l&p)93rx5b=+y=bu3e%4#490c^$jrx*7251+kkux+(p'
-
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -134,4 +131,18 @@ SWAGGER_SETTINGS = {
            'in': 'header'
         }
     }
+}
+
+EMAIL_HOST = '127.0.0.1'
+EMAIL_PORT = 1025
+
+LOCALHOST = "http://localhost:3000/"
+DDM_MANAGER = "manager@ddm.com"
+
+# CELERY
+CELERY_BEAT_SCHEDULE = {
+    'change-item-status': {
+        'task': 'apps.items.tasks.change_item_status',
+        'schedule': 60.0,
+    },
 }
