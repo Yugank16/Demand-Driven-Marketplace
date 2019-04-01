@@ -3,7 +3,6 @@ from django.template.loader import render_to_string
 from django.conf import settings
 
 from celery import shared_task, task
-from celery.schedules import crontab
 
 @shared_task(name="send_reset_email_task")
 def send_reset_email_task(email, user_name, reset_url):
@@ -19,3 +18,5 @@ def send_reset_email_task(email, user_name, reset_url):
             fail_silently=True,
             html_message=render_to_string('reset_password_email.html', ctx),
         )
+
+

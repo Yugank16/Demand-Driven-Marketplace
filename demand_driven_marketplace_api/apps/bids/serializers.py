@@ -44,7 +44,7 @@ class BidSerializer(serializers.ModelSerializer):
                 item = None
             if(not item):
                 raise ValidationError("Item does not exist")
-            data["validity"] = BIDS_CONSTANTS["VALID"]
+            data["validity"] = BIDS_CONSTANTS["PENDING"]
             data["item"] = item
             data["seller"] = user
             images = data["images"]

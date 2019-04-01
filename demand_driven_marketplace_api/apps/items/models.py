@@ -35,7 +35,7 @@ class Item(models.Model):
     )
     item_state = models.PositiveSmallIntegerField(choices=ITEM_STATE_CHOICES)
 
-    months_old = models.PositiveSmallIntegerField()
+    months_old = models.PositiveSmallIntegerField(default=0)
     quantity_required = models.PositiveSmallIntegerField(default=1)
     max_price = models.PositiveIntegerField()
     more_info = models.CharField(max_length=GLOBAL_CONSTANTS["TEXT_SIZE_MEDIUM"], blank=True)

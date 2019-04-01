@@ -6,6 +6,7 @@ from rest_framework.exceptions import ValidationError
 from demand_driven_marketplace_api.settings import AUTH_USER_MODEL
 from apps.items.models import Item
 from apps.bids.models import Bid
+from apps.items.tasks import refund_bidder, send_mail_to_requester, send_mail_to_seller
 from apps.users.serializers import UserSerializer
 from apps.commons.constants import *
 
@@ -55,14 +56,22 @@ class ItemSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):   
 
-        if instance.item_status == ITEM_CONSTANTS['ONHOLD']: 
+        if instance.item_status == ITEM_CONSTANTS['ONHOLD']:
+            requester= {'name': instance.requester.get_short_name(), 'email': instance.requester.email}
             selected_bid = Bid.objects.filter(item__id=instance.id, validity=BIDS_CONSTANTS['VALID']).order_by('bid_price').first()  
             if not selected_bid:
                 validated_data['item_status'] = ITEM_CONSTANTS['UNSOLD']
+                send_mail_to_requester.delay(instance.name, requester, False)
             else:
                 validated_data['item_status'] = ITEM_CONSTANTS['SOLD']
                 selected_bid.validity = BIDS_CONSTANTS['SOLD']
                 selected_bid.save()
+                send_mail_to_requester.delay(instance.name, requester, True)
+                seller= {'name': selected_bid.seller.get_short_name(), 'email': selected_bid.seller.email}
+            
+                send_mail_to_seller.delay(instance.name, seller)
+                
+                # refund_bidder.delay(instance.id, instance.name)
 
         instance = super(ItemSerializer, self).update(instance, validated_data)
         return instance 
@@ -77,9 +86,9 @@ class ItemUpdateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate(self, data):
-        if(self.instance.item_status != ITEM_CONSTANTS['PENDING'] or not data.get("max_price") or len(data)>1):
+        if(self.instance.item_status != ITEM_CONSTANTS['PENDING'] or len(data)>2):
             raise ValidationError("Can not update the required field")
-        if datetime(data.date_time.year, data.date_time.month, data.date_time.day, data.date_time.hour, data.date_time.minute, 0) - self.instance.create_date_time < timedelta(hours=24):
+        if data['date_time'] - self.instance.create_date_time < timedelta(hours=24):
             raise ValidationError({'date_time': 'Required by date time should be atlest 24 hrs after the request made'})
         return data
     

@@ -1,0 +1,3 @@
+Hello, dear {{name}}! Your amount for bidding of {{item}} has been refunded.
+
+-DDM Management
