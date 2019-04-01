@@ -98,7 +98,7 @@ class ItemViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, mixins.Creat
         
     def get_queryset(self):
         if self.action == 'list':
-            return Item.objects.exclude(requester=self.request.user).exclude(item_status__in=[ITEM_CONSTANTS['ONHOLD'],ITEM_CONSTANTS['SOLD'], ITEM_CONSTANTS['UNSOLD'],ITEM_CONSTANTS['PAYMENT_PENDING']])
+            return Item.objects.exclude(requester=self.request.user).exclude(item_status__in=[ITEM_CONSTANTS['ONHOLD'], ITEM_CONSTANTS['SOLD'], ITEM_CONSTANTS['UNSOLD'], ITEM_CONSTANTS['PAYMENT_PENDING']])
         return Item.objects.all()
     
     def get_serializer_context(self):

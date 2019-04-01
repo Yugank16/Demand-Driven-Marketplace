@@ -82,7 +82,16 @@ class ItemUpdateSerializer(serializers.ModelSerializer):
         if datetime(data.date_time.year, data.date_time.month, data.date_time.day, data.date_time.hour, data.date_time.minute, 0) - self.instance.create_date_time < timedelta(hours=24):
             raise ValidationError({'date_time': 'Required by date time should be atlest 24 hrs after the request made'})
         return data
-    
+
+
+class ItemBidSerializer(serializers.ModelSerializer):
+    """
+    Item Bid Serializer For Getting Item Details Againt A Bid 
+    """
+
+    class Meta(object):
+        model = Item
+        fields = ('id', 'name', 'max_price', 'date_time', 'item_status')
 
 
 
