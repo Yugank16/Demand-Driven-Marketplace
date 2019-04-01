@@ -69,7 +69,6 @@ class ItemRequestBid(mixins.CreateModelMixin,
                 currency='usd',
                 description='Bidding Charge',
                 source=token,
-                capture=True,
             )
             serializer.instance.charge_info = charge
             serializer.instance.validity = BIDS_CONSTANTS['VALID']
@@ -87,8 +86,8 @@ class ItemRequestBid(mixins.CreateModelMixin,
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        data = request.data
-        if instance.validity == BIDS_CONSTANTS['PENDING'] and 'payment_token' in data:
+        data= request.data
+        if instance.validity== BIDS_CONSTANTS['PENDING'] and data.get('payment_token'):
             try:
                 stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
                 charge = stripe.Charge.create(
@@ -96,7 +95,6 @@ class ItemRequestBid(mixins.CreateModelMixin,
                     currency='usd',
                     description='Bidding Charge',
                     source=data['payment_token'],
-                    capture=true,
                 )
                 data['charge_info'] = charge
                 data['validity'] = BIDS_CONSTANTS['VALID']

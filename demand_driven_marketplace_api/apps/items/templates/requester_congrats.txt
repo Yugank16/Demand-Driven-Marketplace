@@ -1,0 +1,4 @@
+Hello, dear {{name}}!
+Congratuations! You have got a bid for your {{item}} request.
+
+-DDM Management

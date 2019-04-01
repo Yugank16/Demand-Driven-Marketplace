@@ -97,12 +97,21 @@ AUTH_PASSWORD_VALIDATORS = [
 CHANNEL_LAYERS = {"default": {"BACKEND": "asgiref.inmemory.ChannelLayer",
                               "ROUTING": "demand_driven_marketplace_api.routing.channel_routing", }, }
 
-# CELERY STUFF
+#CELERY STUFF
 CELERY_BROKER_URL = 'redis://localhost:6379'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_TIMEZONE= 'Asia/Kolkata'
+
+CELERY_BEAT_SCHEDULE = {
+    'change-item-status': {
+        'task': 'apps.items.tasks.change_item_status',
+        'schedule': 60.0,
+    },
+}
 
 
 LANGUAGE_CODE = 'en-us'
@@ -138,11 +147,3 @@ EMAIL_PORT = 1025
 
 LOCALHOST = "http://localhost:3000/"
 DDM_MANAGER = "manager@ddm.com"
-
-# CELERY
-CELERY_BEAT_SCHEDULE = {
-    'change-item-status': {
-        'task': 'apps.items.tasks.change_item_status',
-        'schedule': 60.0,
-    },
-}
