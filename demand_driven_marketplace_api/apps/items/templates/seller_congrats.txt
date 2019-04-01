@@ -1,0 +1,5 @@
+
+Hello, dear {{name}},
+Congrats! Your bid was selected for {{item}} request.</h3>
+
+-DDM Management

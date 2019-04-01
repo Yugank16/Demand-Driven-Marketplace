@@ -1,10 +1,8 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.tokens import PasswordResetTokenGenerator, default_token_generator
-from django.core.mail import send_mail
 from django.conf import settings
 from django.shortcuts import render
-from django.template.loader import render_to_string
 
 from rest_framework import mixins, viewsets, status
 from rest_framework.authtoken.models import Token
@@ -16,6 +14,7 @@ from rest_framework.views import APIView
 
 from apps.users.serializers import UserSerializer, EmailSerializer, ChangePasswordSerializer, PasswordTokenSerializer
 from apps.users.models import User
+from apps.users.tasks import send_reset_email_task
 from apps.commons.constants import *
 from apps.commons.custom_permissions import *
 
@@ -83,21 +82,8 @@ class ResetPasswordRequestToken(GenericAPIView):
         token = PasswordResetTokenGenerator.make_token(
             default_token_generator, user)
 
-        reset_url = '{}{}/{}/{}/'.format(settings.LOCALHOST, MESSAGE_CONSTANTS["PASSWORD_RESET_CONFIRM_URL"], user.id, token)
-
-        ctx = {
-            'name': user.get_short_name(),
-            'reset_url': reset_url,
-        }
-        send_mail(
-            'Password Reset Email',
-            render_to_string('reset_password_email.txt', ctx),
-            'manager@ddm.com',
-            [email],
-            fail_silently=True,
-            html_message=render_to_string('reset_password_email.html', ctx),
-        )
-
+        reset_url = '{}{}/{}/{}/'.format(settings.WEBAPP_BASE_URL, MESSAGE_CONSTANTS["PASSWORD_RESET_CONFIRM_URL"], user.id, token)
+        send_reset_email_task.delay(email, user.get_short_name(), reset_url)
         return Response({'data': MESSAGE_CONSTANTS["LINK_SENT_MESSAGE"], 'status': status.HTTP_200_OK})
 
 
@@ -113,7 +99,7 @@ class ResetPasswordTokenVerification(GenericAPIView):
         token = self.kwargs.get('token')
         if not PasswordResetTokenGenerator.check_token(default_token_generator, user, token):
             return Response({'data': MESSAGE_CONSTANTS["INVALID_TOKEN"],
-                             'status': status.HTTP_400_BAD_REQUEST})
+                             'status': status.HTTP_400_BAD_REQUEST})                   
         return Response({'status': status.HTTP_200_OK})
 
 
@@ -133,11 +119,9 @@ class ResetPasswordConfirm(GenericAPIView):
 
         token = self.kwargs.get('token')
         user = self.get_object()
-
         if not PasswordResetTokenGenerator.check_token(default_token_generator, user, token):
             return Response({'data': MESSAGE_CONSTANTS["INVALID_TOKEN"], 'status': status.HTTP_400_BAD_REQUEST})
 
         user.set_password(password)
         user.save()
-
         return Response({'data': MESSAGE_CONSTANTS["PASSWORD_SET"], 'status': status.HTTP_200_OK})

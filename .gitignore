@@ -26,7 +26,10 @@ venv.bak/
 # vscode
 .vscode
 
+celerybeat-schedule
+redis-5.0.4
 #media
 media
+
 
 
