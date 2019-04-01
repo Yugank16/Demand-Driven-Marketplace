@@ -2,9 +2,6 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
-SECRET_KEY = '6p@m9g4l&p)93rx5b=+y=bu3e%4#490c^$jrx*7251+kkux+(p'
-
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -100,12 +97,21 @@ AUTH_PASSWORD_VALIDATORS = [
 CHANNEL_LAYERS = {"default": {"BACKEND": "asgiref.inmemory.ChannelLayer",
                               "ROUTING": "demand_driven_marketplace_api.routing.channel_routing", }, }
 
-# CELERY STUFF
+#CELERY STUFF
 CELERY_BROKER_URL = 'redis://localhost:6379'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_TIMEZONE= 'Asia/Kolkata'
+
+CELERY_BEAT_SCHEDULE = {
+    'change-item-status': {
+        'task': 'apps.items.tasks.change_item_status',
+        'schedule': 60.0,
+    },
+}
 
 
 LANGUAGE_CODE = 'en-us'
@@ -135,3 +141,11 @@ SWAGGER_SETTINGS = {
         }
     }
 }
+
+
+EMAIL_HOST = '127.0.0.1'
+EMAIL_PORT = 1025
+
+LOCALHOST = "http://localhost:3000/"
+
+DDM_MANAGER = "manager@ddm.com"
