@@ -51,6 +51,11 @@ put statements 2 & 4 in our ~/.bashrc file
 
 	pip install -r requirements.txt
 
+5- Install redis (5.0.4) from this link https://redis.io/
+	Unzip it to your directory and move to redis folder and type following command
+
+	src/redis-server
+
 # Start Project
 
 1 Run following command and enter to the main directory.
@@ -61,6 +66,8 @@ put statements 2 & 4 in our ~/.bashrc file
 
 # Run Project
 
+1- Run $ celery -A demand_driven_marketplace_api worker -l info -B 
+
 1- Run $ python manage.py migrate to run migrations.
 
 2- Run server, $ python manage.py runserver.
@@ -68,7 +75,5 @@ put statements 2 & 4 in our ~/.bashrc file
 3- Create Django Admin, in the terminal run $ python manage.py createsuperuser, fill in the required details.
 
 4- Open http://127.0.0.1:8000/admin/ in your browser.
-
-
 
 
