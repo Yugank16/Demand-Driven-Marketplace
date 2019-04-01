@@ -71,7 +71,7 @@ class ItemSerializer(serializers.ModelSerializer):
             
                 send_mail_to_seller.delay(instance.name, seller)
                 
-                # refund_bidder.delay(instance.id, instance.name)
+                refund_bidder.delay(instance.id, instance.name)
 
         instance = super(ItemSerializer, self).update(instance, validated_data)
         return instance 
@@ -91,7 +91,16 @@ class ItemUpdateSerializer(serializers.ModelSerializer):
         if data['date_time'] - self.instance.create_date_time < timedelta(hours=24):
             raise ValidationError({'date_time': 'Required by date time should be atlest 24 hrs after the request made'})
         return data
-    
+
+
+class ItemBidSerializer(serializers.ModelSerializer):
+    """
+    Item Bid Serializer For Getting Item Details Againt A Bid 
+    """
+
+    class Meta(object):
+        model = Item
+        fields = ('id', 'name', 'max_price', 'date_time', 'item_status')
 
 
 

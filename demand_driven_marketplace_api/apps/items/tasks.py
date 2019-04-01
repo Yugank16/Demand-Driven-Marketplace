@@ -50,7 +50,6 @@ def send_mail_to_requester(item_name, item_requester, request_status):
             fail_silently=True,
             html_message=render_to_string(email_html_temp, ctx),
             )        
-    print "sent_mail to requester"
 
 @shared_task
 def send_mail_to_seller(item_name, seller):
@@ -66,8 +65,7 @@ def send_mail_to_seller(item_name, seller):
             [seller['email']],
             fail_silently=True,
             html_message=render_to_string('seller_congrats.html', ctx),
-            )        
-    print "sent_mail to seller"    
+            )           
 
 @shared_task
 def refund_bidder(item_id, item_name):

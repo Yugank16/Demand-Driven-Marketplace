@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 import stripe
 
 from apps.bids.models import Bid
-from apps.bids.serializers import BidSerializer, SpecificBidSerializer, UpdateBidPaymentSerializer, UpdateBidPriceSerializer, CheckBidForItemSerializer
+from apps.bids.serializers import BidSerializer, SpecificBidSerializer, UpdateBidPaymentSerializer, UpdateBidPriceSerializer, CheckBidForItemSerializer, MyBidsSerializer
 from apps.commons.custom_permissions import *
 from apps.commons.constants import *
 
@@ -18,13 +18,15 @@ class BidViewSet(mixins.ListModelMixin,
                  mixins.UpdateModelMixin,
                  viewsets.GenericViewSet):
     """
-    BidViewSet To View Particular Bid details, Update Bid Validity,
+    BidViewSet To View Particular Bid details, Update Bid Validity(can be done only by item requester),
     Delete Bid And List All Bids Made By User
     """
     
     def get_serializer_class(self):
         if self.action == 'retrieve':
             return SpecificBidSerializer
+        elif self.action == 'list':
+            return MyBidsSerializer
         return BidSerializer
     
     def get_queryset(self):
@@ -37,7 +39,7 @@ class BidViewSet(mixins.ListModelMixin,
         if self.action == 'retrieve':
             self.permission_classes = [BidRetrievePermission, IsAuthenticated]     
         elif self.action == 'destroy':
-            self.permission_classes = [BidDeletePermission, IsAuthenticated]
+            self.permission_classes = [BidDeleteUpdatePermission, IsAuthenticated]
         elif self.action == 'partial_update':
             self.permission_classes = [BidUpdatePermission, IsAuthenticated]
         elif self.action == 'list':
@@ -50,7 +52,8 @@ class ItemRequestBid(mixins.CreateModelMixin,
                      mixins.UpdateModelMixin,
                      viewsets.GenericViewSet):
     """
-    ItemRequestBid To Create New Bid For An Item Request And List All Bid For An Item
+    ItemRequestBid To Create New Bid For An Item Request, List All Bid For An Item 
+    And 
     """
 
     def create(self, request, *args, **kwargs):
@@ -111,6 +114,7 @@ class ItemRequestBid(mixins.CreateModelMixin,
         if self.action == 'partial_update':
             return UpdateBidPaymentSerializer
         return BidSerializer
+
     def get_serializer_context(self):
         return {'user': self.request.user, 'item_pk': self.kwargs['item_pk']}
             
@@ -125,7 +129,7 @@ class ItemRequestBid(mixins.CreateModelMixin,
 
 class PriceUpdate(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """
-    PriceUpdate For Seller To Update The Price During Bid
+    PriceUpdate For Seller To Update The Price Of Bid While Item Is Live
     """
     permission_classes = (IsAuthenticated, BidPriceUpdatePermission)
     serializer_class = UpdateBidPriceSerializer
@@ -134,9 +138,19 @@ class PriceUpdate(mixins.UpdateModelMixin, viewsets.GenericViewSet):
 
 class CheckBidForRequest(mixins.ListModelMixin, viewsets.GenericViewSet):
     """
-    View to check bids for Item request
+    View to check bids for Item request by the logged in user
     """
     serializer_class = CheckBidForItemSerializer
 
     def get_queryset(self):
         return Bid.objects.filter(item__id=self.kwargs['item_pk'], seller=self.request.user)
+
+
+class SoldBid(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    View to get details of sold bid against an item request
+    """
+    serializer_class = BidSerializer
+
+    def get_queryset(self):
+        return Bid.objects.filter(item__id=self.kwargs['item_pk'], validity=BIDS_CONSTANTS["SOLD"])

@@ -20,9 +20,9 @@ INSTALLED_APPS = [
     'django_celery_results',
     'django_filters',
     'corsheaders',
+    'drf_yasg',
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_framework_swagger',
     'debug_toolbar',
     'debug_panel',
     'channels',
@@ -120,7 +120,18 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = './media'
+MEDIA_ROOT = './media'  
 AUTH_USER_MODEL = 'users.user'
 
 INTERNAL_IPS = ('127.0.0.1',)
+
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': False,
+    'SECURITY_DEFINITIONS': {
+        'TOKEN': {
+           'type': 'apiKey',
+           'name': 'Authorization',
+           'in': 'header'
+        }
+    }
+}

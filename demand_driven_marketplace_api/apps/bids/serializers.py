@@ -5,7 +5,7 @@ from rest_framework.exceptions import ValidationError
 
 from apps.bids.models import Bid, ItemImage
 from apps.items.models import Item
-from apps.items.serializers import ItemListSerializer
+from apps.items.serializers import ItemListSerializer, ItemBidSerializer
 from apps.users.serializers import UserSerializer
 from apps.commons.constants import *
 
@@ -122,4 +122,12 @@ class CheckBidForItemSerializer(serializers.ModelSerializer):
         fields = ('id',)
 
             
-    
+class MyBidsSerializer(serializers.ModelSerializer):
+    """
+    Serializer to get list of self bids
+    """
+    item = ItemBidSerializer(read_only=True)
+
+    class Meta(object):
+        model = Bid
+        fields = ('id', 'bid_price', 'item') 
