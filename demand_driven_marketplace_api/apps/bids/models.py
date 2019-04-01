@@ -29,7 +29,7 @@ class Bid(models.Model):
     seller = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='bids')
     description = models.CharField(max_length=GLOBAL_CONSTANTS["TEXT_SIZE_LARGE"])
     validity = models.PositiveSmallIntegerField(choices=VALIDITY_CHOICES, default=PENDING)
-    payment_token = models.CharField(max_length=GLOBAL_CONSTANTS["TEXT_SIZE_MEDIUM"], blank=False, default="" ) 
+    payment_token = models.CharField(max_length=GLOBAL_CONSTANTS["TEXT_SIZE_MEDIUM"], blank=True, default="" ) 
     charge_info = JSONField(blank= True, null=True)
 
     def __str__(self):
