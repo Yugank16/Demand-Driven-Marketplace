@@ -9,6 +9,7 @@ __pycache__/
 local_settings.py
 db.sqlite3
 media
+.coverage
 
 # pyenv
 .python-version
@@ -28,3 +29,8 @@ venv.bak/
 
 celerybeat-schedule
 redis-5.0.4
+#media
+media
+
+
+

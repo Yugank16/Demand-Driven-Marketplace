@@ -1,9 +1,11 @@
 from __future__ import unicode_literals
-
+from datetime import datetime
 from django.conf import settings
 from django.db import models
+from django.contrib.postgres.fields import JSONField
 
 from apps.commons.constants import GLOBAL_CONSTANTS
+from apps.commons.constants import *
 
 
 class Item(models.Model):
@@ -33,22 +35,25 @@ class Item(models.Model):
     )
     item_state = models.PositiveSmallIntegerField(choices=ITEM_STATE_CHOICES)
 
-    months_old = models.PositiveSmallIntegerField()
+    months_old = models.PositiveSmallIntegerField(default=0)
     quantity_required = models.PositiveSmallIntegerField(default=1)
     max_price = models.PositiveIntegerField()
     more_info = models.CharField(max_length=GLOBAL_CONSTANTS["TEXT_SIZE_MEDIUM"], blank=True)
-    
+    payment_token = models.CharField(max_length=GLOBAL_CONSTANTS["TEXT_SIZE_MEDIUM"], blank=True)
+    create_date_time = models.DateTimeField(default=datetime.now)
+    payment_amount = models.PositiveIntegerField()
     ITEM_STATUS_CHOICES = (
         (1, 'pending'),
         (2, 'active'),
         (3, 'onhold'),
         (4, 'sold'),
         (5, 'unsold'),
+        (6, 'payment_pending'),
     )
-    item_status = models.PositiveSmallIntegerField(choices=ITEM_STATUS_CHOICES, default=1)
+    item_status = models.PositiveSmallIntegerField(choices=ITEM_STATUS_CHOICES, default=ITEM_CONSTANTS['PAYMENT_PENDING'])
+    charge_info = JSONField(blank=True, null=True)
+    min_bid_price = models.PositiveIntegerField(null=True, blank=True)
 
     def __str__(self):
         return '{}'.format(self.name)
 
-    def __unicode__(self):
-        return '{}'.format(self.name)

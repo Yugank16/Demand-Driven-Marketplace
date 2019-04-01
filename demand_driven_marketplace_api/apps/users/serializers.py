@@ -27,8 +27,8 @@ class UserSerializer(serializers.ModelSerializer):
         return make_password(password)
 
     def validate_birth_date(self, value):
-        if datetime(value.year, value.month, value.day) >= datetime.now().today() :
-            raise serializers.ValidationError({"birth_date": "Birth Date should be valid"})
+        if value >= date.today():
+            raise ValidationError("Birth Date should be valid")
         return value
 
     def validate(self, data):

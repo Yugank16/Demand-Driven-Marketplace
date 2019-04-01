@@ -2,9 +2,6 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
-SECRET_KEY = '6p@m9g4l&p)93rx5b=+y=bu3e%4#490c^$jrx*7251+kkux+(p'
-
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -15,16 +12,17 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',  
+    'django.contrib.staticfiles',
     'django_extensions',
+    'django_celery_results',
     'django_filters',
-
     'corsheaders',
+    'drf_yasg',
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_framework_swagger',
     'debug_toolbar',
     'debug_panel',
+    'channels',
     'apps.users',
     'apps.groups',
     'apps.items',
@@ -86,7 +84,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',   
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -96,12 +94,24 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+CHANNEL_LAYERS = {"default": {"BACKEND": "asgiref.inmemory.ChannelLayer",
+                              "ROUTING": "demand_driven_marketplace_api.routing.channel_routing", }, }
+
 #CELERY STUFF
 CELERY_BROKER_URL = 'redis://localhost:6379'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_TIMEZONE= 'Asia/Kolkata'
+
+CELERY_BEAT_SCHEDULE = {
+    'change-item-status': {
+        'task': 'apps.items.tasks.change_item_status',
+        'schedule': 60.0,
+    },
+}
 
 
 LANGUAGE_CODE = 'en-us'
@@ -116,7 +126,24 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-
+MEDIA_ROOT = './media'  
 AUTH_USER_MODEL = 'users.user'
 
 INTERNAL_IPS = ('127.0.0.1',)
+
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': False,
+    'SECURITY_DEFINITIONS': {
+        'TOKEN': {
+           'type': 'apiKey',
+           'name': 'Authorization',
+           'in': 'header'
+        }
+    }
+}
+
+EMAIL_HOST = '127.0.0.1'
+EMAIL_PORT = 1025
+
+LOCALHOST = "http://localhost:3000/"
+DDM_MANAGER = "manager@ddm.com"

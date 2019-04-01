@@ -14,9 +14,12 @@ urlpatterns = [
     url(r'^api/my-requests/$', SelfItemRequest.as_view({
         'get': 'list',
     }), name='my-requests'),
-    url(r'^api/my-request/delete/(?P<pk>\d+)/$', SelfItemRequest.as_view({
+    url(r'^api/request/delete/(?P<pk>\d+)/$', SelfItemRequest.as_view({
         'delete': 'destroy',
     }), name='request-delete'),
+    url(r'^api/request/update/(?P<pk>\d+)/$', SelfItemRequest.as_view({
+        'patch': 'partial_update',
+    }), name='request-update'),
 
 ]
 

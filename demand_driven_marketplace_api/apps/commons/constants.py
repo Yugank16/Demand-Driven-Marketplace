@@ -3,6 +3,7 @@ GLOBAL_CONSTANTS = {
     "TEXT_SIZE_MEDIUM": 128,
     "TEXT_SIZE_LARGE": 512,
     "TEXT_SIZE_DETAIL": 5000,
+    "ONE_DOLLAR":100,
 }
 
 
@@ -18,6 +19,9 @@ USER_CONSTANTS = {
     "O": 'OTHERS',
     "PHONE_NUMBER": 10,
     "GENDER": 8,
+    "BUYER": 1,
+    "SELLER": 2,
+    "BOTH": 3,
 }
 
 MESSAGE_CONSTANTS = {
@@ -30,9 +34,12 @@ MESSAGE_CONSTANTS = {
 ITEM_CONSTANTS = {
     "PENDING": 1,
     "ACTIVE": 2,
-    "ONHOLD":3,
+    "ONHOLD": 3,
     "SOLD": 4,
     "UNSOLD": 5,
+    "PAYMENT_PENDING": 6,
+    "ONE_PERCENT": 0.01,
+    "DEFAULT_PRICE":0,
 }
 
 BIDS_CONSTANTS = {
@@ -40,5 +47,7 @@ BIDS_CONSTANTS = {
     "INVALID": 2,
     "SOLD": 3,
     "UNSOLD": 4,
+    "PENDING":5,
     "IMAGE": 6,
 }
+

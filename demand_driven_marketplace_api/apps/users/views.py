@@ -99,7 +99,7 @@ class ResetPasswordTokenVerification(GenericAPIView):
         token = self.kwargs.get('token')
         if not PasswordResetTokenGenerator.check_token(default_token_generator, user, token):
             return Response({'data': MESSAGE_CONSTANTS["INVALID_TOKEN"],
-                             'status': status.HTTP_400_BAD_REQUEST})
+                             'status': status.HTTP_400_BAD_REQUEST})                   
         return Response({'status': status.HTTP_200_OK})
 
 
@@ -119,11 +119,9 @@ class ResetPasswordConfirm(GenericAPIView):
 
         token = self.kwargs.get('token')
         user = self.get_object()
-
         if not PasswordResetTokenGenerator.check_token(default_token_generator, user, token):
             return Response({'data': MESSAGE_CONSTANTS["INVALID_TOKEN"], 'status': status.HTTP_400_BAD_REQUEST})
 
         user.set_password(password)
         user.save()
-
         return Response({'data': MESSAGE_CONSTANTS["PASSWORD_SET"], 'status': status.HTTP_200_OK})

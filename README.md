@@ -51,24 +51,35 @@ put statements 2 & 4 in our ~/.bashrc file
 
 	pip install -r requirements.txt
 
+5- Install redis (5.0.4) from this link https://redis.io/
+	Unzip it to your directory and move to redis folder and type following command
+
+	src/redis-server
+
+
 # Start Project
 
 1 Run following command and enter to the main directory.
 	
 	cd ~/demand_driven_marketplace_api/demand_driven_marketplace_api/
 
-2 Add local_settings.py file in the directory where setting is present and configure your local_settings.py file with your database details.
+2 Add local_settings.py file in the directory where local_settings.py.template is stored 	and configure file with your details.
+
+3- Go to stripe official website and register.
+	https://dashboard.stripe.com/register
+
+	After registering , get your public key and secret key and put it in local_settings.py	
 
 # Run Project
 
-1- Run $ python manage.py migrate to run migrations.
+1- Run $ celery -A demand_driven_marketplace_api worker -l info -B 
 
-2- Run server, $ python manage.py runserver.
+2- Run $ python manage.py migrate to run migrations.
 
-3- Create Django Admin, in the terminal run $ python manage.py createsuperuser, fill in the required details.
+3- Run server, $ python manage.py runserver.
 
-4- Open http://127.0.0.1:8000/admin/ in your browser.
+4- Create Django Admin, in the terminal run $ python manage.py createsuperuser, fill in the required details.
 
-
+5- Open http://127.0.0.1:8000/admin/ in your browser.
 
 
