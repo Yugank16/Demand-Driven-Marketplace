@@ -36,13 +36,13 @@ class MyBidsRetrievePermission(BasePermission):
         return request.user.user_type != USER_CONSTANTS["BUYER"]
  
 
-class BidDeletePermission(BasePermission):
+class BidDeleteUpdatePermission(BasePermission):
     """
     Delete is allowed only for Seller who posted the bid
     """
     def has_object_permission(self, request, view, obj):
         
-        return request.user == obj.seller
+        return request.user == obj.seller and obj.item.item_status == ITEM_CONSTANTS["ACTIVE"]
 
 
 class BidRetrievePermission(BasePermission):
