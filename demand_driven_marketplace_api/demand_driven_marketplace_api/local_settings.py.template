@@ -1,0 +1,27 @@
+from settings import *
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+SECRET_KEY = 'YOUR SECRET KEY'
+
+DEBUG = True
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'YOUR DATABASE NAME',
+        'USER': 'YOUR DATABASE USERNAME',
+        'PASSWORD': 'YOUR PASSWORD',
+        'HOST': 'YOUR HOST (eg.localhost)',
+        'PORT': '5432',
+    }
+}
+
+
+
+#Stripe
+STRIPE_TEST_SECRET_KEY = 'YOUR STRIPE SECRET KEY'
+STRIPE_TEST_PUBLIC_KEY = 'YOUR STRIPE PUBLIC KEY'
+STRIPE_LIVE_MODE = False
+

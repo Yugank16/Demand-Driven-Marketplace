@@ -1,0 +1,35 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+.coverage
+
+# pyenv
+.python-version
+
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# vscode
+.vscode
+
+celerybeat-schedule
+redis-5.0.4
+#media
+media
+
+
+

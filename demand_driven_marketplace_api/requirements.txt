@@ -1,0 +1,12 @@
+celery==4.2.1
+Django==1.11.20
+django-rest-framework==0.1.0
+djangorestframework==3.9.1
+django-filter==1.1.0
+drf-yasg==1.13.0
+Pillow==5.4.1
+psycopg2==2.5.4
+channels==1.1.8
+redis==3.2.1
+stripe==2.23.0
+django_celery_results==1.0.4
